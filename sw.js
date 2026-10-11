@@ -1,6 +1,6 @@
 /* Lífsteinn service worker — fresh lineage (purges all elder caches on arrival).
    Never caches failures; icons stay network-fresh so new art appears promptly. */
-const CACHE = 'lifsteinn-v58';
+const CACHE = 'lifsteinn-v65';
 
 self.addEventListener('install', e => {
   e.waitUntil(

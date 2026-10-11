@@ -154,6 +154,17 @@ button,input,select,textarea,optgroup{font-family:inherit}
   .formgrid select{background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6"><path d="M1 1l4 4 4-4" stroke="%235E6A87" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>');background-repeat:no-repeat;background-position:right 12px center;padding-right:30px}
   .formgrid .primary{grid-column:1/-1;height:44px}
   .formgrid input.full{grid-column:1/-1}
+  /* any entry box nothing else styles gets the app's rounded look (zero specificity, so every existing style still wins) */
+  :where(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]):not([type=color]):not([type=hidden]):not([type=button]):not([type=submit]),textarea){border:1.5px solid var(--mist);border-radius:11px;padding:8px 11px;background:var(--card);color:var(--ink);font-size:15px;min-height:40px;box-sizing:border-box}
+  /* labelled fields in the food forms */
+  .fld{display:flex;flex-direction:column;gap:4px;min-width:0;margin:0}
+  .fld>span{font-size:12.5px;font-weight:700;color:var(--mut);line-height:1.2}
+  .fld.full,.fldrow3.full,.fldhint.full,.fldmore.full{grid-column:1/-1}
+  .fldrow3{display:grid;grid-template-columns:1fr 84px 76px;gap:9px}
+  .fldhint{font-size:12.5px;color:var(--mut);line-height:1.35;margin:-3px 0 2px}
+  .fldmore summary{cursor:pointer;padding:4px 0}
+  .cfrow{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+  .libhint{font-size:12.5px;color:var(--mut);margin:2px 0 8px}
   details summary{cursor:pointer;font-weight:700;font-size:13.5px;color:var(--sapphire-deep)}
   details{margin-top:10px}
   .liblist{max-height:320px;overflow-y:auto;border:1.5px solid var(--mist);border-radius:12px;margin-top:8px;background:var(--card)}
@@ -213,7 +224,12 @@ button,input,select,textarea,optgroup{font-family:inherit}
   .cell .dots{position:relative;z-index:1}
   .cell .dots{display:flex;gap:2px;height:6px;margin-top:1px}
   .cell .dot{width:5px;height:5px;border-radius:50%}
-  .dot.keto{background:var(--leaf)} .dot.meas{background:#8A56C2}
+  .dot.keto{background:var(--leaf)} .dot.meas{background:#8A56C2} .dot.mark{background:var(--sun)}
+  .markrows{display:flex;flex-direction:column;gap:6px;margin-top:9px}
+  .markrow{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:var(--paper);border:1px solid var(--mist);border-radius:12px;padding:9px 12px;color:var(--ink);cursor:pointer;font:inherit}
+  .markrow .mi{font-size:17px} .markrow .mt{flex:1;min-width:0} .markrow .mt small{display:block;font-size:12px;color:var(--mut)} .markrow .mg{color:var(--mut);font-size:18px}
+  .addchoices{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  #daymarks h2{margin-bottom:4px}
   .cell .fbar{position:absolute;left:0;bottom:0;height:4px;background:var(--sun);border-radius:0 2px 0 0}
   .cell.today{border:2px solid var(--sun);font-weight:700;color:var(--sapphire-deep);background:#FBF3DA;animation:todaypulse 3.2s ease-in-out infinite}
   @keyframes todaypulse{0%,100%{box-shadow:0 0 0 0 rgba(201,162,39,0)}50%{box-shadow:0 0 10px 2px rgba(201,162,39,.45)}}
@@ -473,6 +489,9 @@ body.eink{--sheet1:#FFFFFF;--sheet2:#FFFFFF;--paperedge:#000000;--laidA:0;--chai
 .lspaper::before,.lorebox::before{top:-5px;background-image:radial-gradient(6.6px 3.4px at 6px 100%,var(--sheet1) 0 94%,transparent 100%),radial-gradient(7.3px 4.2px at 6px 100%,var(--paperedge) 0 94%,transparent 100%);filter:drop-shadow(0 -1px 1.5px rgba(27,36,64,.12))}
 .lspaper::after,.lorebox::after{bottom:-5px;background-image:radial-gradient(6.6px 3.4px at 6px 0,var(--sheet2) 0 94%,transparent 100%),radial-gradient(7.3px 4.2px at 6px 0,var(--paperedge) 0 94%,transparent 100%);filter:drop-shadow(0 1px 1.5px rgba(27,36,64,.12))}
 .lorebox .moonlore,.lorebox .daydetail,.lspaper .tn,.lspaper .tn small{color:var(--paperink)!important}
+.lorebox .markrow{background:rgba(255,255,255,.08);border-color:var(--paperedge);color:var(--paperink)}
+.lorebox .markrow .mt small,.lorebox .markrow .mg{color:var(--paperink);opacity:.7}
+.lorebox .daydetail .mini{background:transparent;border:1px solid var(--paperedge);color:var(--paperink)}
 .lspaper .tn small{opacity:.7}
 body.stoneview .lorebox{background:repeating-linear-gradient(0deg,rgba(var(--lineR),var(--laidA)) 0 1px,transparent 1px 4px),linear-gradient(180deg,var(--sheet1),var(--sheet2))!important}
 @media (prefers-reduced-motion:reduce){body.stoneview header::after{animation:none!important}}
@@ -621,6 +640,19 @@ header{cursor:pointer}
 
 /* --- Steinntaka: fog, centred text, compact screens --- */
 #stn{background:#07080D}
+/* the Steinhöll (visits after the first Steinntaka): a light grey hall with slow streams of light */
+#stn.hall{background:linear-gradient(180deg,#9EA3AC 0%,#8C929C 55%,#80868F 100%)}
+#stn.hall::before{content:'';position:absolute;inset:-40% -60%;pointer-events:none;
+  background:repeating-linear-gradient(105deg,rgba(255,255,255,0) 0 70px,rgba(255,255,255,.28) 110px,rgba(255,255,255,0) 160px,rgba(255,255,255,0) 260px);
+  filter:blur(14px);opacity:.8;animation:hallLight 28s linear infinite}
+#stn.hall::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% -10%,rgba(255,255,255,.42),rgba(255,255,255,0) 60%)}
+@keyframes hallLight{from{transform:translateX(-6%)}to{transform:translateX(6%)}}
+#stn.hall #stnfog{display:none}
+#stn.hall #stnstars i{background:#FFF8E2;opacity:.85;box-shadow:0 0 6px 2px rgba(255,255,255,.95),0 0 2px 1px rgba(176,146,70,.45)}
+#stn.hall #stnback,#stn.hall #stnexit,#stn.hall #stnmusic{background:rgba(20,24,42,.62);border-color:rgba(20,24,42,.18);color:#F3EEE2}
+#stn.hall #stndots i{background:rgba(255,255,255,.35)}#stn.hall #stndots i.done{background:rgba(234,217,176,.8)}#stn.hall #stndots i.on{background:#F3E3B5}
+#stn.hall .stninfo{background:rgba(60,66,80,.35)}
+@media (prefers-reduced-motion:reduce){#stn.hall::before{animation:none}}
 #stnfog{position:absolute;inset:-20%;pointer-events:none;filter:blur(46px);opacity:.9}
 #stnfog i{position:absolute;border-radius:50%;mix-blend-mode:screen}
 #stnfog i:nth-child(1){width:70%;height:55%;left:-5%;top:10%;background:radial-gradient(circle,rgba(150,170,220,.30),transparent 65%);animation:fogA 26s ease-in-out infinite alternate}
@@ -632,6 +664,9 @@ header{cursor:pointer}
 @keyframes fogC{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-8%,-10%) scale(1.3)}}
 #stnbg.on~#stnfog{opacity:.35;transition:opacity 1s}
 #stnstars i{opacity:.1}
+#stnexit{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));left:66px;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.06);color:#F3EEE2;font-size:17px;cursor:pointer;z-index:3}
+#stnexit[hidden]{display:none}
+#stnexit.solo{left:14px}
 #stnmusic{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:14px;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.06);color:#F3EEE2;font-size:18px;cursor:pointer;z-index:3}
 #stnmusic.off{opacity:.45;text-decoration:line-through}
 #stnwin,.stnopt,.stntab,.stnadj .gh{text-align:center}
@@ -850,7 +885,22 @@ header h1{padding-left:0!important}
   .srrow .lbl{color:rgba(234,217,176,.92);flex-shrink:0;font-family:'Alegreya SC',serif;font-size:12.5px;letter-spacing:.06em}
   .srrow b{text-align:right;color:#fff}
   .surfhint{margin-top:24px;font-family:'Caudex',serif;font-style:italic;font-size:13.5px;color:rgba(255,255,255,.88);text-shadow:0 1px 9px rgba(0,0,0,.65)}
-  .surfstein{margin-top:17px;font-family:'Alegreya SC',serif;letter-spacing:.12em;font-size:13.5px;background:rgba(24,19,9,.42);border:1px solid rgba(212,180,120,.6);color:#F2E3C2;border-radius:999px;padding:9px 19px;cursor:pointer;box-shadow:inset 0 0 0 2px rgba(212,180,120,.16)}
+  .surfbtns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.surfbtns .surfstein{margin-top:17px}
+.runeabout{margin-top:6px;line-height:1.45}
+.runesum{margin-top:12px;font-size:16px}
+.runerows{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.runerow{display:flex;align-items:center;gap:12px;padding:8px 10px;border:1px solid var(--mist);border-radius:12px;background:var(--paper)}
+.runerow span{display:flex;flex-direction:column;min-width:0}.runerow small{color:var(--mut);font-size:12.5px;line-height:1.3}
+/* stand-in rune mark: a carved disc that grows deeper and warmer with each milestone */
+.runemark{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;
+  font:700 13px 'Winky Sans',sans-serif;color:rgba(255,246,220,calc(.55 + var(--d)*.45));
+  background:radial-gradient(circle at 40% 35%,#5C6170,#2E323D);
+  box-shadow:inset 0 calc(2px + var(--d)*4px) calc(3px + var(--d)*6px) rgba(0,0,0,calc(.35 + var(--d)*.4)),inset 0 -1px 0 rgba(255,255,255,.12),0 0 calc(var(--d)*14px) rgba(232,199,102,calc(var(--d)*.55));
+  text-shadow:0 0 calc(var(--d)*8px) rgba(232,199,102,.9),0 -1px 0 rgba(0,0,0,.6)}
+.runecele{text-align:center}.runecele .runemark{width:72px;height:72px;font-size:20px;margin:6px auto 4px}
+.runecele h2{margin:6px 0 2px}.runename{font-size:19px;font-weight:700;margin-bottom:4px}
+.surfstein{margin-top:17px;font-family:'Alegreya SC',serif;letter-spacing:.12em;font-size:13.5px;background:rgba(24,19,9,.42);border:1px solid rgba(212,180,120,.6);color:#F2E3C2;border-radius:999px;padding:9px 19px;cursor:pointer;box-shadow:inset 0 0 0 2px rgba(212,180,120,.16)}
   .stonechip{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--mist);border-radius:12px;padding:9px 12px;margin:0 0 10px;cursor:pointer}
   .stonechip .stoneorb{width:27px;height:27px}
   body.aurora .stonechip{background:rgba(14,22,48,.65);border-color:rgba(201,162,39,.4)}
@@ -901,6 +951,7 @@ header h1{font-family:'Homemade Apple',cursive;font-weight:400;font-size:26px;li
 header .tag{font-family:'Winky Sans',sans-serif;font-size:12.5px;opacity:.9;margin-top:13px;text-shadow:1.5px 0 0 var(--headnavy),-1.5px 0 0 var(--headnavy),0 1.5px 0 var(--headnavy),0 -1.5px 0 var(--headnavy),0 0 8px var(--headnavy),0 0 16px var(--headnavy)}
 header .kicker,header h1,header .tag{position:relative;z-index:2}
 .hdrtools{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:12px;display:flex;gap:8px;z-index:3}
+.hdrtools img.lsglyph{filter:drop-shadow(0 0 2px rgba(255,255,255,.75)) drop-shadow(0 0 5px rgba(255,255,255,.35))}
 .hdrtools button{width:34px;height:34px;border-radius:11px;border:1px solid rgba(255,255,255,.35);background:rgba(13,26,54,.72);font-size:15px;cursor:pointer;color:#fff}
 body.aurora .hdrtools button{background:rgba(6,13,30,.74)}
 body.daylight header{background:linear-gradient(180deg,#6FA3D8 0%,#A9CBEA 55%,#F4E3BD 100%);border-bottom-color:#E6C66A;--headnavy:#2E5580}
@@ -1220,6 +1271,7 @@ nav button .ico img.lsglyph{width:1.45em;height:1.45em;vertical-align:-0.32em}
       <div class="en" id="pv-en"></div>
     </div></div>
     <div class="cdrow" id="cdrow" style="display:none"></div>
+    <div class="card" id="daymarks" style="display:none"></div>
     <div class="card" id="gemreview" style="display:none"></div>
     <div class="card" id="c-credit">
       <h2>💎 Weekly credit</h2>
@@ -1336,22 +1388,6 @@ nav button .ico img.lsglyph{width:1.45em;height:1.45em;vertical-align:-0.32em}
         <span class="sub" id="gequiv"></span>
         <button class="primary" id="fadd">Add</button>
       </div>
-      <details>
-        <summary>＋ Create custom food</summary>
-        <div class="formgrid">
-          <input class="full" type="text" id="cf-name" placeholder="name this food…">
-          <div class="full addrow" style="margin:0;align-items:center"><span class="sub">Values are per</span><select id="cf-basis" style="flex:1"><option value="100">100 g</option><option value="serv">one serving (as on the label)</option></select></div>
-          <div class="full addrow" id="cf-servbox" style="display:none;margin:0"><input type="text" id="cf-sname" placeholder="serving, e.g. 2 tbsp" style="flex:1;min-width:0"><input type="number" id="cf-sg" placeholder="size" step="any" style="width:72px"><select id="cf-su" style="width:auto"><option>g</option><option>ml</option></select></div>
-          <input type="number" id="cf-kcal" placeholder="kcal">
-          <input type="number" id="cf-p" placeholder="protein g" step="0.1">
-          <input type="number" id="cf-c" placeholder="carbs g" step="0.1">
-          <input type="number" id="cf-fb" placeholder="fiber g" step="0.1">
-          <input type="number" id="cf-f" placeholder="fat g" step="0.1">
-          <input type="number" id="cf-dens" placeholder="g per ml (optional — enables volume logging)" step="0.01">
-          <details class="full" style="margin:2px 0"><summary class="sub">More nutrients (optional)</summary><div class="formgrid" id="cf-extra"></div></details>
-          <button class="primary" id="cf-add">Save to my library</button>
-        </div>
-      </details>
     </div>
     <div class="card" id="c-quickadd">
       <h2>⚡ Quick add</h2>
@@ -1361,6 +1397,12 @@ nav button .ico img.lsglyph{width:1.45em;height:1.45em;vertical-align:-0.32em}
         <button class="mini" id="savecombo" style="flex:1">💾 Save today as combo</button>
       </div>
       <div class="combos" id="combos"></div>
+    </div>
+    <div class="card" id="c-customfood">
+      <h2>⭐ Create custom food</h2>
+      <div class="formgrid" id="cf-grid">
+        <button class="primary" id="cf-add">Save to my library</button>
+      </div>
     </div>
     <div class="card" id="c-recipes">
       <h2>🍳 Recipes <span class="sub">your dishes, per-serving accurate</span></h2>
@@ -1404,11 +1446,12 @@ nav button .ico img.lsglyph{width:1.45em;height:1.45em;vertical-align:-0.32em}
       <details>
         <summary>⚙️ Daily targets</summary>
         <div class="formgrid">
-          <input type="number" id="t-kcal" placeholder="kcal"><input type="number" id="t-p" placeholder="protein g">
-          <input type="number" id="t-nc" placeholder="net carbs g"><input type="number" id="t-f" placeholder="fat g">
+          <label class="fld"><span>Energy (kcal)</span><input type="number" inputmode="decimal" id="t-kcal"></label><label class="fld"><span>Protein (g)</span><input type="number" inputmode="decimal" id="t-p"></label>
+          <label class="fld"><span>Net carbs (g)</span><input type="number" inputmode="decimal" id="t-nc"></label><label class="fld"><span>Fat (g)</span><input type="number" inputmode="decimal" id="t-f"></label>
           <button class="primary" id="t-save">Save targets</button>
         </div>
-        <div class="addrow" style="margin-top:8px"><button class="mini" id="t-days">🗓️ Targets by day</button><button class="mini" id="t-record">📝 Just a record</button><button class="mini" id="t-avoid">🚫 Foods I don't eat</button></div>
+        <div class="addrow" style="margin-top:8px"><button class="mini" id="t-days">🗓️ Targets by day</button><button class="mini" id="t-record">📝 Just a record</button></div>
+        <div class="addrow" style="margin-top:6px"><button class="mini" id="t-avoid">🚫 Foods I don't eat</button></div>
         <div id="t-plannote"></div>
         <div class="addrow" style="flex-wrap:wrap;margin-top:8px">
           <select id="t-rule" style="flex:1;min-width:200px">
@@ -1426,10 +1469,10 @@ nav button .ico img.lsglyph{width:1.45em;height:1.45em;vertical-align:-0.32em}
       <h2>🧮 Macro calculator <button class="infobtn" data-info="calc">ⓘ</button> <button class="chip unitchip" style="margin-left:auto">kg · cm</button></h2>
       <div class="infobox" id="info-calc"></div>
       <div class="formgrid">
-        <select id="mc-sex"><option value="F">Female</option><option value="M">Male</option></select>
-        <input type="number" id="mc-age" placeholder="age">
-        <input type="number" id="mc-h" placeholder="height cm" step="0.1">
-        <input type="number" id="mc-w" placeholder="weight kg" step="0.1">
+        <label class="fld"><span>Sex</span><select id="mc-sex"><option value="F">Female</option><option value="M">Male</option></select></label>
+        <label class="fld"><span>Age</span><input type="number" inputmode="numeric" id="mc-age"></label>
+        <label class="fld"><span id="lbl-mc-h">Height (cm)</span><input type="number" inputmode="decimal" id="mc-h" step="0.1"></label>
+        <label class="fld"><span id="lbl-mc-w">Weight (kg)</span><input type="number" inputmode="decimal" id="mc-w" step="0.1"></label>
         <select id="mc-act" style="grid-column:1/-1"></select>
         <select id="mc-goal"></select>
         <select id="mc-diet"></select>
@@ -1578,10 +1621,10 @@ nav button .ico img.lsglyph{width:1.45em;height:1.45em;vertical-align:-0.32em}
     <div class="card" id="c-funds">
       <h2>🏔️ Savings funds</h2>
       <div id="fundlist"><div class="sub">No savings funds yet. Add one below.</div></div>
-      <div class="addrow" style="flex-wrap:wrap">
-        <input type="text" id="newfundname" placeholder="name the fund…" style="flex:1 1 100%">
-        <input type="number" id="newfundtarget" placeholder="target amount" style="flex:1;min-width:110px">
-        <select id="newfundcc" style="flex:1;min-width:120px"></select><input id="newfundcctxt" placeholder="currency" style="flex:1 1 100%;display:none">
+      <div class="addrow" style="flex-wrap:wrap;align-items:flex-end">
+        <label class="fld" style="flex:1 1 100%"><span>Fund name</span><input type="text" id="newfundname"></label>
+        <label class="fld" style="flex:1;min-width:110px"><span>Target amount</span><input type="number" inputmode="decimal" id="newfundtarget"></label>
+        <label class="fld" style="flex:1;min-width:120px"><span>Currency</span><select id="newfundcc"></select></label><input id="newfundcctxt" placeholder="currency" style="flex:1 1 100%;display:none">
         <button class="mini" id="addfund">Add</button>
       </div>
       <div class="gentle">Tap a fund to set a date, change the currency, or see its history.</div>
@@ -1626,7 +1669,7 @@ nav button .ico img.lsglyph{width:1.45em;height:1.45em;vertical-align:-0.32em}
     <div class="card" id="c-steinholl">
       <h2>Your stone</h2>
       <div class="addrow" style="margin-top:0">
-        <button class="mini" id="steinresetbtn" style="flex:1">Visit the Steinhöll</button>
+        <button class="mini" id="steinresetbtn" style="flex:1">Visit the Steinhöll</button><button class="mini" id="runesbtn" style="flex:1">Lífsrúnir ✦</button>
       </div>
       <div class="gentle">Change your stone, update your details, or reshape what your stone keeps. Everything you've logged stays.</div>
     </div>
@@ -1703,7 +1746,7 @@ nav button .ico img.lsglyph{width:1.45em;height:1.45em;vertical-align:-0.32em}
     <div class="srrow"><span class="lbl">Weekly credit</span><b id="sr-credit">100þ · unspent</b></div>
     <div class="srrow"><span class="lbl" id="sr-resetlbl">Last Gem Day reset</span><b id="sr-reset">—</b></div>
   </div>
-  <button class="surfstein" id="sr-stein">The Steinhöll 💎</button>
+  <div class="surfbtns"><button class="surfstein" id="sr-stein">The Steinhöll 💎</button><button class="surfstein" id="sr-runes">Lífsrúnir ✦</button></div>
   <button class="surfok" id="sr-ok">Continue</button>
   <div class="surfhint">or tap anywhere to continue ✦</div>
 </div></div>
@@ -1712,8 +1755,8 @@ nav button .ico img.lsglyph{width:1.45em;height:1.45em;vertical-align:-0.32em}
   <h2>🗃️ A new collection</h2>
   <div class="sub">Name it, pick an icon, and choose the fields each entry has.</div>
   <div class="addrow" style="margin-top:10px">
-    <input type="text" id="cn-icon" maxlength="4" placeholder="✒️" style="flex:0 0 64px;text-align:center" class="bigfield">
-    <input type="text" id="cn-name" maxlength="30" placeholder="collection name" class="bigfield" style="flex:1">
+    <label class="fld" style="flex:0 0 64px"><span>Icon</span><input type="text" id="cn-icon" maxlength="4" placeholder="✒️" style="text-align:center" class="bigfield"></label>
+    <label class="fld" style="flex:1"><span>Name</span><input type="text" id="cn-name" maxlength="30" class="bigfield"></label>
   </div>
   <div class="addrow" style="margin-top:8px">
     <select id="cn-tpl" style="flex:1">
@@ -1910,6 +1953,7 @@ nav button .ico img.lsglyph{width:1.45em;height:1.45em;vertical-align:-0.32em}
 <div id="rearrbar"><span>Press and hold a card or tab until it lifts, then drag it. Drop a card on a tab to move it there.</span><button id="rearrdone">✓ Done</button></div>
 <div id="stn" aria-live="polite"><div id="stnbg"></div><div id="stnfog"><i></i><i></i><i></i><i></i></div><div id="stnstars"></div><div id="stnveil"></div><button id="stnmusic" aria-label="Music">♪</button>
   <button id="stnback" aria-label="Back">‹</button>
+  <button id="stnexit" aria-label="Leave the Steinhöll" title="Leave the Steinhöll" hidden>✕</button>
   <div id="stnwin"></div>
   <div id="stndots"></div>
   <button id="stnmore" aria-label="More below">⌄</button>
@@ -3069,11 +3113,13 @@ function pickDefaultUnit(f){ if(f&&f.recipe){ $('funit').value='por'; $('fgrams'
 function akaHint(f,q){ if(!f.aka||f.name.toLowerCase().includes(q.trim().toLowerCase())) return ''; const m=f.aka.split('; ').find(a=>a.toLowerCase().includes(q.trim().toLowerCase())); return m?' <span class="sub">('+esc(m)+')</span>':''; }
 function setUnitOptions(f){
   const u=$('funit'); if(!u) return; const cur=u.value;
-  u.innerHTML='<optgroup label="Weight">'+unitOpts(WEIGHT_UNITS)+'</optgroup><optgroup label="Volume">'+unitOpts(VOLUME_UNITS)+'</optgroup>'+(f&&f.por&&f.porG?'<optgroup label="Portion"><option value="por">'+esc(f.por)+' ('+f.porG+' g)</option></optgroup>':'');
+  u.innerHTML=(f&&f.por&&f.porG?'<optgroup label="Portion"><option value="por">'+esc(f.por)+' ('+f.porG+' g)</option></optgroup>':'')+'<optgroup label="Weight">'+unitOpts(WEIGHT_UNITS)+'</optgroup><optgroup label="Volume">'+unitOpts(VOLUME_UNITS)+'</optgroup>';
   const last=D.lastFoodUnit&&D.lastFoodUnit!=='por'?D.lastFoodUnit:null;
   u.value=[...u.options].some(o=>o.value===cur)?cur:(last&&[...u.options].some(o=>o.value===last)?last:'g');
   /* a remembered unit like lb starts at 1, never at 100 */
   if(u.value!=='g'&&$('fgrams')&&+$('fgrams').value===100) $('fgrams').value=1;
+  /* your own foods with a serving start on it: 1 serving, as on the label */
+  if(f&&f.custom&&f.por&&f.porG){ u.value='por'; if($('fgrams')) $('fgrams').value=1; if(typeof renderGEquiv==='function') renderGEquiv(); }
 }
 /* g per ml, for volume→grams (volume↔volume is exact; volume↔grams only via density; water 1 ml = 1 g) */
 const DENSITY={'Olive oil':.91,'Avocado oil':.91,'Coconut oil':.92,'MCT oil':.95,'Sesame oil':.92,'Ghee':.91,'Lard':.9,'Beef tallow':.9,
@@ -3144,24 +3190,97 @@ $('fadd').onclick=()=>{
   toast('Logged '+said+' 🍲');
   selFood=null; $('fsearch').value=''; $('amtrow').style.display='none'; $('fgrams').value=100; setUnitOptions(null); if($('gequiv'))$('gequiv').textContent='';
 };
-$('cf-add').onclick=()=>{
-  const n=$('cf-name').value.trim(); if(!n) return toast('Give it a name first');
-  const cf={name:n+' ★',kcal:+$('cf-kcal').value||0,p:+$('cf-p').value||0,c:+$('cf-c').value||0,fb:+$('cf-fb').value||0,f:+$('cf-f').value||0};
-  const dn=+$('cf-dens').value; if(dn>0) cf.dens=dn;
-  document.querySelectorAll('#cf-extra input').forEach(inp=>{ if(inp.value!=='') cf[inp.dataset.n]=+inp.value; });
+/* ===== The custom food form: one set of labelled fields, used to create and to edit ===== */
+function foodFormHTML(px){
+  const num=(k,lab)=>'<label class="fld"><span>'+lab+'</span><input type="number" inputmode="decimal" step="any" id="'+px+'-'+k+'"></label>';
+  return '<label class="fld full"><span>Name</span><input type="text" id="'+px+'-name"></label>'+
+    '<label class="fld full"><span>The numbers below are for</span><select id="'+px+'-basis"><option value="100">100 g</option><option value="serv">one serving (as on the label)</option></select></label>'+
+    '<div class="fldrow3 full" id="'+px+'-servbox" style="display:none">'+
+      '<label class="fld"><span>Serving name</span><input type="text" id="'+px+'-sname" placeholder="e.g. 1 scoop"></label>'+
+      '<label class="fld"><span>Size</span><input type="number" inputmode="decimal" step="any" id="'+px+'-sg"></label>'+
+      '<label class="fld"><span>Unit</span><select id="'+px+'-su"><option>g</option><option>ml</option></select></label></div>'+
+    num('kcal','Energy (kcal)')+num('p','Protein (g)')+num('c','Carbs, total (g)')+num('fb','Fiber (g)')+
+    '<div class="fldhint full">Total carbs include fiber. If a label lists fiber separately and leaves it out of carbohydrate, add the two together.</div>'+
+    num('f','Fat (g)')+num('dens','Grams per ml (optional)')+
+    '<div class="fldhint full">Grams per ml lets you log it in cups and spoons. Leave it empty if you\'re not sure.</div>'+
+    '<details class="full fldmore"><summary class="sub">More nutrients (optional)</summary><div class="formgrid" id="'+px+'-extra">'+
+      NUTRIENTS.filter(([x])=>x!=='fb').map(([x,lab,u])=>'<label class="fld"><span>'+esc(lab)+' ('+u+')</span><input type="number" inputmode="decimal" step="any" data-n="'+x+'"></label>').join('')+
+    '</div></details>';
+}
+function bindFoodForm(px){ $(px+'-basis').onchange=e=>{ $(px+'-servbox').style.display=e.target.value==='serv'?'':'none'; }; }
+/* read the form into a food stored per 100 g; returns {cf,note} or {err} */
+function readFoodForm(px){
+  const n=$(px+'-name').value.trim(); if(!n) return {err:'Give it a name first'};
+  const v=k=>+$(px+'-'+k).value||0;
+  const cf={name:n+' ★',kcal:v('kcal'),p:v('p'),c:v('c'),fb:v('fb'),f:v('f')};
+  const dn=+$(px+'-dens').value; if(dn>0) cf.dens=dn;
+  document.querySelectorAll('#'+px+'-extra input').forEach(inp=>{ if(inp.value!=='') cf[inp.dataset.n]=+inp.value; });
   let note='';
-  if($('cf-basis').value==='serv'){
-    const size=+$('cf-sg').value; if(!(size>0)) return toast('How big is one serving? Add its size in g or ml');
-    let g=size; if($('cf-su').value==='ml'){ if(dn>0) g=size*dn; else { g=size; note=' (assumed 1 ml = 1 g — add g per ml below for accuracy)'; } }
+  if($(px+'-basis').value==='serv'){
+    const size=+$(px+'-sg').value; if(!(size>0)) return {err:'How big is one serving? Add its size in g or ml'};
+    let g=size; if($(px+'-su').value==='ml'){ if(dn>0) g=size*dn; else { g=size; note=' (assumed 1 ml = 1 g — add grams per ml for accuracy)'; } }
     const fct=100/g; ['kcal','p','c','fb','f'].concat(NUT_EXTRA).forEach(x=>{ if(cf[x]!=null) cf[x]=+(cf[x]*fct).toFixed(x==='kcal'?1:2); });
-    cf.por=$('cf-sname').value.trim()||'1 serving'; cf.porG=+g.toFixed(1);
+    cf.por=$(px+'-sname').value.trim()||'1 serving'; cf.porG=+g.toFixed(1);
   }
-  document.querySelectorAll('#cf-extra input').forEach(inp=>inp.value='');
-  ['cf-sname','cf-sg'].forEach(i=>$(i).value='');
-  D.customFoods.unshift(cf);
-  ['cf-name','cf-kcal','cf-p','cf-c','cf-fb','cf-f','cf-dens'].forEach(i=>$(i).value='');
-  save(); renderLibrary(); toast('Saved to your foods ★'+note);
+  return {cf,note};
+}
+/* show a stored food in the form: by its serving if it has one, otherwise per 100 g */
+function fillFoodForm(px,f){
+  const byServ=!!(f.por&&f.porG), r=byServ?f.porG/100:1;
+  $(px+'-name').value=(f.name||'').replace(/\s*★$/,'');
+  $(px+'-basis').value=byServ?'serv':'100'; $(px+'-servbox').style.display=byServ?'':'none';
+  $(px+'-sname').value=byServ?f.por:''; $(px+'-sg').value=byServ?f.porG:''; $(px+'-su').value='g';
+  [['kcal',f.kcal],['p',f.p],['c',f.c],['fb',f.fb],['f',f.f]].forEach(([k,x])=>{ $(px+'-'+k).value=x==null?'':+(x*r).toFixed(k==='kcal'?1:2); });
+  $(px+'-dens').value=f.dens||'';
+  document.querySelectorAll('#'+px+'-extra input').forEach(inp=>{ const x=f[inp.dataset.n]; inp.value=x==null?'':+(x*r).toFixed(2); });
+  if([...document.querySelectorAll('#'+px+'-extra input')].some(i=>i.value!=='')) $(px+'-extra').closest('details').open=true;
+}
+function clearFoodForm(px){
+  document.querySelectorAll('#'+px+'-name,#'+px+'-sname,#'+px+'-sg,#'+px+'-kcal,#'+px+'-p,#'+px+'-c,#'+px+'-fb,#'+px+'-f,#'+px+'-dens,#'+px+'-extra input').forEach(i=>i.value='');
+}
+$('cf-add').onclick=()=>{
+  const res=readFoodForm('cf'); if(res.err) return toast(res.err);
+  D.customFoods.unshift(res.cf); clearFoodForm('cf');
+  save(); renderLibrary(); toast('Saved to your foods ★'+res.note);
 };
+/* edit one of your foods (press and hold it in the library) */
+function openFoodEdit(name){
+  const idx=D.customFoods.findIndex(x=>x.name===name); if(idx<0) return;
+  const f=D.customFoods[idx];
+  popup('<h2>✎ Edit '+esc(f.name.replace(/\s*★$/,''))+'</h2><div class="sub">Changes apply from now on: food you\'ve already logged stays as it was. Recipes that use it are updated.</div>'+
+    '<div class="formgrid">'+foodFormHTML('ce')+'<button class="primary" id="ce-save">Save changes</button><button class="mini" data-close style="grid-column:1/-1">Cancel</button></div>',sh=>{
+    bindFoodForm('ce'); fillFoodForm('ce',f);
+    $('ce-save').onclick=()=>{
+      const res=readFoodForm('ce'); if(res.err) return toast(res.err);
+      const nf=res.cf, old=f.name;
+      if(nf.name!==old&&D.customFoods.some((x,j)=>j!==idx&&x.name===nf.name)) return toast('You already have a food with that name');
+      D.customFoods[idx]=nf;
+      /* recipes keep their own copy of each ingredient: bring those up to date */
+      let nRec=0;
+      (D.recipes||[]).forEach(rc=>{ let hit=false; (rc.items||[]).forEach(it=>{ if(it.name!==old) return; hit=true;
+        it.name=nf.name; it.k=nf.kcal; it.p=nf.p; it.c=nf.c; it.fb=nf.fb; it.f=nf.f; it.pol=nf.pol;
+        NUT_EXTRA.forEach(x=>{ if(nf[x]!=null) it[x]=nf[x]; else delete it[x]; });
+        if(nf.dens) it.dens=nf.dens; else delete it.dens;
+        if(nf.por&&nf.porG){ it.por=nf.por; it.porG=nf.porG; } else { delete it.por; delete it.porG; if(it.unit==='por'){ it.unit='g'; it.amt=it.g; } }
+        if(it.unit==='por'&&it.porG) it.g=+(it.amt*it.porG).toFixed(1); });
+        if(hit) nRec++; });
+      closePopup(); save(); renderLibrary(); if(typeof renderRecipes==='function') renderRecipes();
+      toast('Updated ★'+(nRec?' · also in '+nRec+' recipe'+(nRec===1?'':'s'):'')+res.note);
+    };
+  });
+}
+/* press and hold a row (touch), or right-click it, to run fn; a quick tap still does its usual thing */
+function holdToEdit(el,fn){
+  let t=null,sx=0,sy=0;
+  el.addEventListener('pointerdown',e=>{ if(e.pointerType==='mouse') return; sx=e.clientX; sy=e.clientY; clearTimeout(t);
+    t=setTimeout(()=>{ t=null; el.dataset.held=Date.now(); if(navigator.vibrate) try{ navigator.vibrate(10); }catch(_){} fn(); },520); },{passive:true});
+  el.addEventListener('pointermove',e=>{ if(t&&(Math.abs(e.clientX-sx)>10||Math.abs(e.clientY-sy)>10)){ clearTimeout(t); t=null; } },{passive:true});
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>el.addEventListener(ev,()=>{ clearTimeout(t); t=null; },{passive:true}));
+  el.addEventListener('contextmenu',e=>{ e.preventDefault(); e.stopPropagation(); clearTimeout(t); t=null;
+    if(Date.now()-(+el.dataset.held||0)<800) return; /* Android repeats our own long-press */
+    el.dataset.held=Date.now(); fn(); });
+}
+const justHeld=el=>Date.now()-(+el.dataset.held||0)<800;
 function renderMeals(){
   const k=todayKey(), list=D.meals[k]||[], w=$('meallist');
   const m=dayMacros(k);
@@ -3198,7 +3317,7 @@ function renderTargets(){ const pp=pendingPlan('targets'), shown=pp?pp.base:D.ta
   if($('t-plannote')){ const k=todayKey(), by=(pp||planEntry('targets',k)||{}).byDay||{}, days=Object.keys(by).map(Number).sort();
     $('t-plannote').innerHTML=(pp?'<div class="plannote">These targets start tomorrow. Today keeps '+D.targets.kcal+' kcal · P '+D.targets.p+' · C '+D.targets.nc+' · F '+D.targets.f+'.</div>':'')+
       (days.length?'<div class="sub" style="margin-top:6px">'+days.map(d=>wdName(d)+': '+(by[d].fastday?'fasting day':by[d].kcal+' kcal')).join(' · ')+'</div>':''); }
-  $('t-nc').placeholder=carbLabel()+' g';
+  $('t-nc').placeholder=carbLabel()+' g'; { const lb=$('t-nc').previousElementSibling; if(lb){ const cl=carbLabel(); lb.textContent=cl.charAt(0).toUpperCase()+cl.slice(1)+' (g)'; } }
   if($('t-rule')) $('t-rule').value=D.macroRule||'keto';
   if($('carbmodechip')) $('carbmodechip').textContent='counting: '+carbLabel();
 }
@@ -3276,17 +3395,18 @@ function renderLibrary(){
   $('libcat').innerHTML=cats.map(c=>'<option'+(c===cur?' selected':'')+'>'+c+'</option>').join('');
   const sel=$('libcat').value||'All';
   const list=foods.filter(f=>sel==='All'||f.cat===sel);
-  $('liblist').innerHTML=list.map(f=>'<div class="res"><span'+(f.custom?' class="custom"':'')+'>'+esc(f.name)+'</span><span class="rm">'+f.k+' kcal · P'+f.p+' · '+carbAbbr()+(D.carbMode==='total'?(+f.c).toFixed(1):netCarbs(f).toFixed(1))+' · F'+f.f+(pDense(f)?' <span title="protein-dense: 40%+ of calories from protein">💪</span>':'')+(f.custom?' <button class="mini danger cfdel" data-cf="'+esc(f.name)+'">✕</button>':'')+'</span></div>').join('');
+  $('liblist').innerHTML=(list.some(f=>f.custom)?'<div class="libhint">Press and hold one of your ★ foods to edit it.</div>':'')+list.map(f=>'<div class="res'+(f.custom?' noctx cfrow':'')+'"><span'+(f.custom?' class="custom"':'')+'>'+esc(f.name)+'</span><span class="rm">'+f.k+' kcal · P'+f.p+' · '+carbAbbr()+(D.carbMode==='total'?(+f.c).toFixed(1):netCarbs(f).toFixed(1))+' · F'+f.f+(pDense(f)?' <span title="protein-dense: 40%+ of calories from protein">💪</span>':'')+(f.custom?' <button class="mini danger cfdel" data-cf="'+esc(f.name)+'">✕</button>':'')+'</span></div>').join('');
   const rows=$('liblist').querySelectorAll('.res');
   rows.forEach((el,i)=>{ if(!list[i].custom){ const ib=document.createElement('button'); ib.className='mini finfo'; ib.textContent='ⓘ'; ib.title='Full nutrition'; el.appendChild(ib); ib.onclick=ev=>{ ev.stopPropagation(); foodInfo(list[i]); }; }
-    el.onclick=(ev)=>{ if(ev.target.classList.contains('cfdel')||ev.target.classList.contains('finfo')) return; selFood=list[i]; setUnitOptions(selFood); $('selname').textContent=selFood.name; $('amtrow').style.display='flex'; $('fsearch').value=selFood.name; window.scrollTo({top:0,behavior:'smooth'}); toast('Set grams up top & tap Add'); }; });
+    if(list[i].custom) holdToEdit(el,()=>openFoodEdit(list[i].name));
+    el.onclick=(ev)=>{ if(ev.target.classList.contains('cfdel')||ev.target.classList.contains('finfo')) return; if(justHeld(el)) return; selFood=list[i]; setUnitOptions(selFood); $('selname').textContent=selFood.name; $('amtrow').style.display='flex'; $('fsearch').value=selFood.name; window.scrollTo({top:0,behavior:'smooth'}); toast('Set grams up top & tap Add'); }; });
   $('liblist').querySelectorAll('.cfdel').forEach(b=>b.onclick=async(ev)=>{ ev.stopPropagation(); if(await askYes('Delete "'+b.dataset.cf+'" from your foods?',{ok:'Delete',danger:1})){ D.customFoods=D.customFoods.filter(x=>x.name!==b.dataset.cf); save(); renderLibrary(); } });
 }
 $('libcat').onchange=renderLibrary;
 /* ========== TASKS & COUNTDOWNS ========== */
 function daysUntil(dstr){ return Math.ceil((new Date(dstr+'T00:00').getTime()-new Date().setHours(0,0,0,0))/86400000); }
 function renderTasks(){
-  const open=D.tasks.filter(t=>!t.done), done=D.tasks.filter(t=>t.done);
+  marksRefresh(); const open=D.tasks.filter(t=>!t.done), done=D.tasks.filter(t=>t.done);
   const rank=t=>t.due?daysUntil(t.due):9999;
   open.sort((a,b)=>rank(a)-rank(b));
   $('taskcount').textContent=open.length?open.length+' open':'';
@@ -3324,7 +3444,7 @@ $('newtask').onkeydown=e=>{if(e.key==='Enter')$('addtask').click();};
 /* ---------- countdowns: yearly dates, a choice about Today, readable dates ---------- */
 function cdNext(c){ if(!c.yearly) return c.date; const t=todayKey(), md=c.date.slice(5); let y=new Date().getFullYear(); let k=y+'-'+md; if(k<t) k=(y+1)+'-'+md; return k; }
 function renderCountdowns(){
-  D.countdowns=D.countdowns||[];
+  D.countdowns=D.countdowns||[]; marksRefresh();
   const row=$('cdrow');
   const tiles=D.countdowns.filter(c=>!c.hide).map(c=>({c,k:cdNext(c),d:daysUntil(cdNext(c))})).filter(x=>x.d>=-7).sort((x,y)=>x.k<y.k?-1:1);
   if(row){ if(!tiles.length){ row.innerHTML=''; row.style.display='none'; }
@@ -3976,6 +4096,60 @@ let calY=new Date().getFullYear(), calM=new Date().getMonth(), selDay=null;
   document.addEventListener('touchend',e=>{ if(sx==null) return; const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy; sx=null;
     if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.6){ const g=$('calgrid'); if(g){ g.classList.remove('swl','swr'); void g.offsetWidth; g.classList.add(dx<0?'swl':'swr'); } $(dx<0?'calnext':'calprev').click(); } },{passive:true});
 })();
+/* ===== Things marked on a day: notes, tasks due, goals, countdowns, fund dates ===== */
+function cdOnDay(c,k){ return c.date===k||(c.yearly&&c.date&&k>=c.date&&c.date.slice(5)===k.slice(5)); }
+function dayMarks(k){
+  const out=[], notes=(D.calNotes||{})[k]||[];
+  notes.forEach(n=>out.push({kind:'note',icon:'📌',text:n.text,ref:n}));
+  if(moduleOn('tasks')) (D.tasks||[]).filter(t=>t.due===k&&!t.done).forEach(t=>out.push({kind:'task',icon:'✅',text:t.name,sub:'task due',ref:t}));
+  if(moduleOn('goals')) (D.goals||[]).filter(g=>g.due===k&&!g.doneAt).forEach(g=>out.push({kind:'goal',icon:'🌟',text:g.name,sub:'goal date',ref:g}));
+  if(moduleOn('countdowns')) (D.countdowns||[]).filter(c=>cdOnDay(c,k)).forEach(c=>out.push({kind:'cd',icon:'📆',text:c.name,sub:'countdown',ref:c}));
+  if(moduleOn('funds')) (D.funds||[]).filter(f=>f.due===k).forEach(f=>out.push({kind:'fund',icon:'🏔️',text:f.name,sub:'savings date',ref:f}));
+  return out;
+}
+function markRowsHTML(list,all){ return '<div class="markrows">'+list.map(x=>'<button class="markrow" data-mk="'+all.indexOf(x)+'"><span class="mi">'+x.icon+'</span><span class="mt">'+esc(x.text)+(x.sub?'<small>'+x.sub+'</small>':'')+'</span><span class="mg">›</span></button>').join('')+'</div>'; }
+function markRows(k){ const m=dayMarks(k); return m.length?markRowsHTML(m,m):''; }
+function bindMarkRows(box,k,after){
+  const m=dayMarks(k);
+  box.querySelectorAll('[data-mk]').forEach(b=>b.onclick=ev=>{ ev.stopPropagation(); const x=m[+b.dataset.mk]; if(!x) return;
+    if(x.kind==='cd') return cdEditor(x.ref);
+    if(x.kind==='goal') return goalEditor(x.ref);
+    if(x.kind==='fund') return fundEditor(x.ref);
+    if(x.kind==='task') return popup('<h2>✅ '+esc(x.ref.name)+'</h2><div class="sub">Due '+niceDate(k)+'</div><div class="addrow" style="margin-top:14px;flex-wrap:wrap"><button class="primary" id="mk-done" style="flex:1">Done ✓</button><button class="mini" id="mk-ren">Rename</button><button class="mini" id="mk-del">Delete</button></div>',()=>{
+      $('mk-done').onclick=()=>{ x.ref.done=true; x.ref.doneAt=Date.now(); closePopup(); marksChanged(after); toast('Done ✓'); };
+      $('mk-ren').onclick=async()=>{ closePopup(); const v=await askText('Rename task',x.ref.name,{ok:'Save'}); if(v&&v.trim()){ x.ref.name=v.trim(); marksChanged(after); } };
+      $('mk-del').onclick=()=>{ D.tasks=D.tasks.filter(t=>t!==x.ref); closePopup(); marksChanged(after); toast('Task deleted'); }; });
+    if(x.kind==='note') return popup('<h2>📌 Note for '+niceDate(k)+'</h2><textarea id="mk-note" rows="3" style="width:100%;margin-top:10px">'+esc(x.text)+'</textarea><div class="addrow" style="margin-top:12px"><button class="mini" id="mk-ndel">Delete</button><button class="primary" id="mk-nsave" style="flex:1">Save</button></div>',()=>{
+      $('mk-nsave').onclick=()=>{ const v=$('mk-note').value.trim(); if(!v) return toast('Write something, or delete the note'); x.ref.text=v; closePopup(); marksChanged(after); };
+      $('mk-ndel').onclick=()=>{ const L=D.calNotes[k]; L.splice(L.indexOf(x.ref),1); if(!L.length) delete D.calNotes[k]; closePopup(); marksChanged(after); toast('Note deleted'); }; });
+  });
+}
+function marksChanged(after){ save(); if(typeof renderTasks==='function') renderTasks(); if(typeof renderGoals==='function') renderGoals(); renderCountdowns(); if(typeof renderFunds==='function') renderFunds(); if(after) after(); }
+/* add something to a day, with its date already set */
+function addToDay(k,after){
+  const opts=[['note','📌','Note',true],['task','✅','Task due',moduleOn('tasks')],['goal','🌟','Goal date',moduleOn('goals')],['cd','📆','Countdown',moduleOn('countdowns')]].filter(o=>o[3]);
+  popup('<h2>＋ Add to '+niceDate(k)+'</h2><div class="addchoices">'+opts.map(([id,ic,l])=>'<button class="chip" data-ad="'+id+'">'+ic+' '+l+'</button>').join('')+'</div>',()=>{
+    document.querySelectorAll('#ctxov [data-ad]').forEach(b=>b.onclick=async()=>{ const kind=b.dataset.ad; closePopup();
+      const T={note:'Note for '+niceDate(k),task:'Task due '+niceDate(k),goal:'Goal for '+niceDate(k),cd:'Countdown to '+niceDate(k)}[kind];
+      const v=await askText(T,'',{ok:'Add'}); if(!v||!v.trim()) return; const name=v.trim(), id=Date.now();
+      if(kind==='note'){ D.calNotes=D.calNotes||{}; (D.calNotes[k]=D.calNotes[k]||[]).push({id,text:name}); }
+      if(kind==='task'){ D.tasks=D.tasks||[]; D.tasks.push({id,name,due:k,done:false}); }
+      if(kind==='goal'){ D.goals=D.goals||[]; D.goals.push({id,name,pct:0,due:k}); }
+      if(kind==='cd'){ D.countdowns=D.countdowns||[]; D.countdowns.push({id,name,date:k}); }
+      marksChanged(after); toast('Added to '+niceDate(k)); }); });
+}
+/* Today: what's marked for today that isn't already shown elsewhere on Today (countdowns and due tasks have their own places) */
+/* after anything dated changes: Today's marks, and the open calendar day */
+function marksRefresh(){ if(typeof renderDayMarks!=='function') return; renderDayMarks();
+  let sd=null; try{ sd=selDay; }catch(e){}
+  if(sd&&$('daydetail')&&$('daydetail').classList.contains('show')&&!marksRefresh.busy){ marksRefresh.busy=1; try{ renderCalendar(); } finally { marksRefresh.busy=0; } } }
+function renderDayMarks(){
+  const w=$('daymarks'); if(!w) return; const k=todayKey(), all=dayMarks(k);
+  const m=all.filter(x=>x.kind==='note'||x.kind==='goal'||x.kind==='fund');
+  if(!m.length){ w.style.display='none'; w.innerHTML=''; return; }
+  w.style.display=''; w.innerHTML='<h2>📌 Marked for today</h2>'+markRowsHTML(m,all);
+  bindMarkRows(w,k,null);
+}
 function renderCalendar(){
   const first=new Date(calY,calM,1), days=new Date(calY,calM+1,0).getDate();
   $('calmonth').innerHTML='<span class="calyear">'+calY+'</span><span class="calmoon">'+(moonStyle()?MOONS[calM]+' Moon · ':'')+first.toLocaleDateString(undefined,{month:'long'})+'</span>';
@@ -3984,6 +4158,7 @@ function renderCalendar(){
   const g=$('calgrid'); g.innerHTML='';
   for(let i=0;i<first.getDay();i++){const c=document.createElement('div');c.className='cell empty';g.appendChild(c);}
   const tk=todayKey(); let ketoDays=0, studyMin=0, fastHrs=0;
+  const markDays=new Set(); for(let d=1;d<=days;d++){ const k=calY+'-'+pad(calM+1)+'-'+pad(d); if(dayMarks(k).length) markDays.add(k); }
   const measDates=new Set(D.measures.map(m=>keyOf(new Date(m.date))));
   const cycSet=new Set(D.cycleDays);
   const predSet=new Set();
@@ -4000,7 +4175,7 @@ function renderCalendar(){
     const isBday=D.profile&&!D.profile.skipped&&D.profile.moon===calM&&D.profile.day===d;
     if(isBday){ const bst=BIRTHSTONES[D.profile.moon][D.profile.stoneIdx||0]; c.style.background='linear-gradient(180deg,'+hexA(bst[1],.5)+','+hexA(bst[2],.5)+')'; }
     c.innerHTML='<span class="sprout">'+(isRestDay(k)?'☾':s>=3?'★':s>=1?'✦':'')+'</span><span>'+d+'</span>'+(FV?'<span class="fest" title="'+FV.n+'">'+FV.e+'</span>':(isBday?'<span class="fest" title="Your birthday">🎂</span>':''))+
-      '<span class="dots">'+(keto?'<i class="dot keto"></i>':'')+(measDates.has(k)?'<i class="dot meas"></i>':'')+(cycSet.has(k)?'<i class="dot cyc"></i>':(predSet.has(k)?'<i class="dot pred"></i>':''))+'</span>'+
+      '<span class="dots">'+(keto?'<i class="dot keto"></i>':'')+(measDates.has(k)?'<i class="dot meas"></i>':'')+(cycSet.has(k)?'<i class="dot cyc"></i>':(predSet.has(k)?'<i class="dot pred"></i>':''))+(markDays.has(k)?'<i class="dot mark"></i>':'')+'</span>'+
       (fh>0.5?'<span class="fbar" style="width:'+(fh/24*100)+'%"></span>':'');
     c.onclick=()=>{ selDay=(selDay===k?null:k); renderCalendar(); if(selDay){ const lb=document.querySelector('.lorebox'); lb&&lb.scrollIntoView({behavior:'smooth',block:'nearest'}); } };
     g.appendChild(c);
@@ -4029,8 +4204,12 @@ function renderCalendar(){
       (moduleOn('cycle')&&d&&d.symp&&SYMPTOMS.some(([id])=>d.symp[id])?SYMPTOMS.filter(([id])=>d.symp[id]).map(x=>x[1]).join(' · ')+'<br>':'')+
       (typeof dayPhotoThumbs==='function'?dayPhotoThumbs(selDay):'')+
       (d&&d.notes?'✍🏽 '+esc(d.notes):'')+
-      (selDay<=todayKey()?'<div style="margin-top:9px"><button class="mini" id="editday">✎ edit this day</button></div><div id="dayeditor"></div>':'');
+      markRows(selDay)+
+      '<div class="addrow" style="margin-top:9px;flex-wrap:wrap">'+(selDay<=todayKey()?'<button class="mini" id="editday">✎ edit this day</button>':'')+'<button class="mini" id="addtoday">＋ Add to this day</button></div>'+
+      (selDay<=todayKey()?'<div id="dayeditor"></div>':'');
     dd.classList.add('show');
+    bindMarkRows(dd,selDay,renderCalendar);
+    if($('addtoday')) $('addtoday').onclick=ev=>{ ev.stopPropagation(); addToDay(selDay,renderCalendar); };
     const eb=$('editday');
     if(eb) eb.onclick=()=>openDayEditor(selDay);
     const br=$('bdayreplay');
@@ -4053,9 +4232,9 @@ function renderDayEditor(k){
     ED={study:d.study||'',exercise:d.exercise||'',steps:d.steps||'',mood:d.mood||0,
         learning:!!d.learning,project:d.project||'',projdone:!!d.projdone,notes:d.notes||''};
   }
-  const T=moduleOn('threads'), sh=id=>T&&thrOn(id), nums=[['study','ed-study',thrCfg('study').name+' min'],['exercise','ed-ex',thrCfg('exercise').name+' min'],['steps','ed-steps','steps']].filter(([id])=>sh(id));
+  const T=moduleOn('threads'), sh=id=>T&&thrOn(id), nums=[['study','ed-study',thrCfg('study').name+' (min)'],['exercise','ed-ex',thrCfg('exercise').name+' (min)'],['steps','ed-steps','Steps']].filter(([id])=>sh(id));
   w.innerHTML=
-   (nums.length?'<div class="addrow" style="flex-wrap:wrap;margin-top:9px">'+nums.map(([id,el,ph])=>'<input type="number" id="'+el+'" placeholder="'+esc(ph)+'" value="'+ED[id]+'" style="flex:1;min-width:76px">').join('')+'</div>':'')+
+   (nums.length?'<div class="addrow" style="flex-wrap:wrap;margin-top:9px">'+nums.map(([id,el,ph])=>'<label class="fld" style="flex:1;min-width:96px"><span>'+esc(ph)+'</span><input type="number" inputmode="numeric" id="'+el+'" value="'+ED[id]+'"></label>').join('')+'</div>':'')+
    (moduleOn('mood')?'<div class="moodrow" style="margin-top:8px">'+MOODS.map(([v,e])=>'<button data-m="'+v+'" class="'+(ED.mood===v?'on':'')+'">'+e+'</button>').join('')+'</div>':'')+
    (sh('learning')||sh('project')?'<div class="addrow" style="flex-wrap:wrap;margin-top:8px">'+
      (sh('learning')?'<button class="chip'+(ED.learning?' on':'')+'" id="ed-learn">'+thrCfg('learning').icon+' '+esc(thrCfg('learning').name)+'</button>':'')+
@@ -4104,8 +4283,8 @@ function renderUnitUI(){
   document.querySelectorAll('.unitchip').forEach(x=>x.textContent=wU()+' · '+lU());
   const L={'lbl-w':'Weight '+wU(),'lbl-waist':'Waist '+lU(),'lbl-hips':'Hips '+lU(),'lbl-bust':'Chest / bust '+lU(),'lbl-arm':'Arm '+lU(),'lbl-thigh':'Thigh '+lU(),'lbl-neck':'Neck '+lU(),'lbl-shoulders':'Shoulders '+lU(),'lbl-calf':'Calf '+lU()};
   Object.keys(L).forEach(id=>{ if($(id)) $(id).textContent=L[id]; });
-  if($('mc-h')) $('mc-h').placeholder='height '+lU();
-  if($('mc-w')) $('mc-w').placeholder='weight '+wU();
+  if($('lbl-mc-h')) $('lbl-mc-h').textContent='Height ('+lU()+')';
+  if($('lbl-mc-w')) $('lbl-mc-w').textContent='Weight ('+wU()+')';
 }
 document.querySelectorAll('.unitchip').forEach(x=>x.onclick=()=>{
   D.units=isImp()?'metric':'imperial'; save();
@@ -4199,7 +4378,7 @@ function dueText(k){ const n=daysUntil(k); return n>1?n+' days left':n===1?'due 
 function goalPct(g){ const st=g.steps||[]; return st.length?Math.round(st.filter(x=>x.done).length/st.length*100):(g.pct||0); }
 function askSure(title,text,yes,fn){ popup('<h2>'+title+'</h2><div class="sub">'+text+'</div><div class="addrow" style="margin-top:14px"><button class="mini" data-close>Keep it</button><button class="primary danger" id="as-yes" style="flex:1">'+yes+'</button></div>',()=>{ $('as-yes').onclick=()=>{ closePopup(); fn(); }; }); }
 function renderGoals(){
-  const w=$('goallist'); if(!w) return; D.goals=D.goals||[];
+  marksRefresh(); const w=$('goallist'); if(!w) return; D.goals=D.goals||[];
   const act=D.goals.filter(g=>!g.doneAt), done=D.goals.filter(g=>g.doneAt).sort((x,y)=>y.doneAt<x.doneAt?-1:1);
   w.innerHTML=(act.length?'':'<div class="sub">'+(done.length?'Every goal here is finished. Add a new one below.':'Nothing yet — add your first goal below.')+'</div>')+
     act.map(g=>{ const p=goalPct(g), st=g.steps||[];
@@ -4609,9 +4788,104 @@ function showSurfaceMoons(pf,hvNames){
 }
 function hideSurface(){ const ov=$('surfaceov'); if(!ov) return; ov.classList.add('fading');
   setTimeout(()=>{ ov.classList.remove('show'); ov.classList.remove('fading'); },500); }
-if($('surfaceov')) $('surfaceov').addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#sr-stein')) return; hideSurface(); });
+if($('surfaceov')) $('surfaceov').addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#sr-stein,#sr-runes')) return; hideSurface(); });
 if($('surfaceov')) $('surfaceov').addEventListener('touchmove',()=>hideSurface(),{passive:true});
 if($('sr-stein')) $('sr-stein').onclick=e=>{ e.stopPropagation(); hideSurface(); setTimeout(steinhollInfo,450); };
+if($('sr-runes')) $('sr-runes').onclick=e=>{ e.stopPropagation(); hideSurface(); setTimeout(openRunes,450); };
+if($('runesbtn')) $('runesbtn').onclick=()=>openRunes();
+/* ===== Lífsrúnir: runes the stone gathers as you live with it =====
+   Totals only, never streaks; a rune is never lost. Each rune deepens at the same ladder of milestones.
+   The look here is a stand-in: earned runes are kept as data (D.runes), so a new look changes nothing earned. */
+const RUNE_LADDER=[1,3,5,7,10,14,21,30,50,100,180,365,500,730,1000];
+const RUNE_ABOUT='Lífsrúnir are runes your stone gathers as you live with it. Each one marks a part of your days, and it\'s etched deeper as they add up. A rune is never lost: missed days and rest days never take anything away.';
+function runeLevel(n){ let l=0; RUNE_LADDER.forEach(x=>{ if(n>=x) l++; }); return l; }
+function runeDays(pred){ const tk=todayKey(); let n=0; Object.keys(D.days||{}).forEach(k=>{ if(k<=tk&&D.days[k]&&pred(D.days[k],k)) n++; }); return n; }
+function runeKeyDays(obj){ const tk=todayKey(); return Object.keys(obj||{}).filter(k=>k<=tk&&obj[k]&&(!Array.isArray(obj[k])||obj[k].length)).length; }
+function runeDayHas(d){ return !!d&&((d.study>0)||(d.exercise>0)||d.learning||d.project||d.projdone||d.notes||d.mood||(d.water>0)||(d.steps>0)||
+  (d.trk&&Object.values(d.trk).some(v=>v!==undefined&&v!==''&&v!==false&&v!==0))); }
+function runeAnyDays(){ const tk=todayKey(), s=new Set();
+  Object.keys(D.days||{}).forEach(k=>{ if(k<=tk&&runeDayHas(D.days[k])) s.add(k); });
+  [D.meals,D.workouts,D.sleep].forEach(o=>Object.keys(o||{}).forEach(k=>{ const v=o[k]; if(k<=tk&&v&&(!Array.isArray(v)||v.length)) s.add(k); }));
+  (D.measures||[]).forEach(m=>{ if(m&&m.date) s.add(keyOf(new Date(m.date))); });
+  (D.fasts||[]).forEach(f=>{ if(f&&f.start) s.add(keyOf(new Date(f.start))); });
+  (D.tasks||[]).forEach(t=>{ if(t&&t.done&&t.doneAt) s.add(keyOf(new Date(t.doneAt))); });
+  return [...s].filter(k=>k<=tk).length; }
+function runeBestowed(){ const pf=D.profile||{}; return pf.bestowed||todayKey(); }
+function runeStoneDays(){ const pf=D.profile; if(!pf||pf.moon==null) return 0; const from=runeBestowed(), tk=todayKey(); let n=0;
+  for(let y=+from.slice(0,4);y<=+tk.slice(0,4);y++){ const k=y+'-'+pad(pf.moon+1)+'-'+pad(pf.day||1); if(k>=from&&k<=tk) n++; } return n; }
+function runeGemDays(){ const d=new Date(runeBestowed()+'T00:00'), end=todayKey(); let n=0; for(let g=0;g<6000&&keyOf(d)<=end;g++){ if(d.getDay()===5) n++; d.setDate(d.getDate()+1); } return n; }
+function runeArrivals(){ const tk=todayKey(); let n=0; (D.countdowns||[]).forEach(c=>{ if(!c.date) return;
+  if(!c.yearly){ if(c.date<=tk) n++; return; }
+  for(let y=+c.date.slice(0,4);y<=+tk.slice(0,4);y++){ if((y+c.date.slice(4))<=tk) n++; } }); return n; }
+/* [id, working name, what it counts, shown when, count] */
+const RUNES=[
+ ['bestowal','Bestowal','your Steinntaka',()=>true,()=>1],
+ ['firstmark','First Mark','days you recorded anything',()=>true,runeAnyDays],
+ ['stoneday','Stone Day','birthdays lived with your stone',()=>true,runeStoneDays],
+ ['calnotes','Calendar Notes','days marked with a note',()=>moduleOn('calendar'),()=>Object.keys(D.calNotes||{}).filter(k=>(D.calNotes[k]||[]).length).length],
+ ['tasks','Tasks','tasks finished',()=>moduleOn('tasks'),()=>(D.tasks||[]).filter(t=>t.done).length],
+ ['habits','Habits','days with a habit ticked',()=>moduleOn('threads'),()=>runeDays(d=>d.trk&&Object.values(d.trk).some(v=>v!==undefined&&v!==''&&v!==false&&v!==0))],
+ ['mood','Mood','days with your mood noted',()=>moduleOn('mood'),()=>runeDays(d=>!!d.mood)],
+ ['journal','Journal','days with a note to self',()=>moduleOn('journal'),()=>runeDays(d=>!!(d.notes&&String(d.notes).trim()))],
+ ['gemdays','Gem Days','weeks lived with your stone',()=>moduleOn('credit')||moduleOn('review'),runeGemDays],
+ ['gentle','Gentle Days','rest or lighter days you gave yourself',()=>moduleOn('credit'),()=>new Set(creditSpends().filter(x=>(x.kind==='rest'||x.kind==='light')&&x.day&&x.day<=todayKey()).map(x=>x.day)).size],
+ ['water','Water','days your water goal was met',()=>moduleOn('water'),()=>runeDays((d,k)=>(d.water||0)>0&&(d.water||0)>=waterGoalFor(k))],
+ ['sleep','Sleep','nights logged',()=>moduleOn('sleep'),()=>runeKeyDays(D.sleep)],
+ ['steps','Steps','goal steps finished',()=>moduleOn('goals'),()=>(D.goals||[]).reduce((a,g)=>a+(g.steps||[]).filter(s=>s.done).length,0)],
+ ['goals','Goals','goals finished',()=>moduleOn('goals'),()=>(D.goals||[]).filter(g=>g.doneAt).length],
+ ['arrivals','Arrivals','countdown days that arrived',()=>moduleOn('countdowns'),runeArrivals],
+ ['savings','Savings','deposits made',()=>moduleOn('funds'),()=>(D.funds||[]).reduce((a,f)=>a+(f.log||[]).filter(x=>x.amt>0).length,0)],
+ ['filled','Funds Filled','funds that reached their target',()=>moduleOn('funds'),()=>(D.funds||[]).filter(f=>f.target>0&&f.cur>=f.target).length],
+ ['keepsakes','Keepsakes','items kept in collections',()=>moduleOn('collections'),()=>(D.collections||[]).reduce((a,c)=>a+(c.items||[]).length,0)],
+ ['food','Food','days with food logged',()=>moduleOn('food'),()=>runeKeyDays(D.meals)],
+ ['kitchen','Kitchen','recipes and custom foods made',()=>moduleOn('food'),()=>(D.recipes||[]).length+(D.customFoods||[]).length],
+ ['movement','Movement','days with a workout logged',()=>moduleOn('workouts'),()=>runeKeyDays(D.workouts)]];
+const RUNE_ONE={'days you recorded anything':'day you recorded anything','birthdays lived with your stone':'birthday lived with your stone','days marked with a note':'day marked with a note','tasks finished':'task finished','days with a habit ticked':'day with a habit ticked','days with your mood noted':'day with your mood noted','days with a note to self':'day with a note to self','weeks lived with your stone':'week lived with your stone','rest or lighter days you gave yourself':'rest or lighter day you gave yourself','days your water goal was met':'day your water goal was met','nights logged':'night logged','goal steps finished':'goal step finished','goals finished':'goal finished','countdown days that arrived':'countdown day that arrived','deposits made':'deposit made','funds that reached their target':'fund that reached its target','items kept in collections':'item kept in a collection','days with food logged':'day with food logged','recipes and custom foods made':'recipe or custom food made','days with a workout logged':'day with a workout logged'};
+const runeDef=id=>RUNES.find(r=>r[0]===id);
+function runeMarkHTML(id,lv){ const ms=RUNE_LADDER[lv-1]||0, depth=lv/RUNE_LADDER.length;
+  return '<span class="runemark" style="--d:'+depth.toFixed(2)+'" aria-hidden="true">'+ms+'</span>'; }
+function runeLine(id,lv){ const r=runeDef(id); if(!r) return ''; if(id==='bestowal') return 'Your Steinntaka';
+  const ms=RUNE_LADDER[lv-1], nx=RUNE_LADDER[lv]; return ms+' '+(ms===1&&RUNE_ONE[r[2]]?RUNE_ONE[r[2]]:r[2])+(nx?' · next at '+nx:' · etched as deep as a rune goes'); }
+/* count everything, note any rune that has deepened, and queue its moment */
+function runeCheck(){
+  const pf=D.profile; if(!pf||pf.skipped||pf.moon==null||D.stn) return;
+  const first=!D.runes; D.runes=D.runes||{}; const fresh=[]; let changed=false;
+  RUNES.forEach(([id,,,vis,count])=>{ let on=false; try{ on=vis(); }catch(e){} if(!on) return;
+    let n=0; try{ n=count()||0; }catch(e){ return; } const lv=runeLevel(n), prev=D.runes[id];
+    if(prev===undefined){ D.runes[id]=lv; changed=true; if(!first&&lv===1&&n===1) fresh.push({id,lv}); return; } /* a rune newly in view: celebrate only a true first */
+    if(lv>prev){ D.runes[id]=lv; changed=true; if(!first) fresh.push({id,lv}); } });
+  if(first){ D.runesIntro=0; changed=true; }
+  if(fresh.length){ const q=D.runeQ=D.runeQ||[]; fresh.forEach(f=>{ const i=q.findIndex(x=>x.id===f.id); if(i>=0) q[i].lv=Math.max(q[i].lv,f.lv); else q.push(f); }); }
+  if(changed) save();
+}
+function runeQuiet(){ const open=id=>{ const e=$(id); return e&&e.classList.contains('show'); };
+  return !(open('stn')||open('surfaceov')||open('ctxov')||open('askov')||open('coach')||document.documentElement.classList.contains('stn-boot')||!D.coachDone); }
+/* one moment at a time, and only when nothing else is open */
+function runeShow(){
+  if(!D.runes||!runeQuiet()) return;
+  if(D.runesIntro===0){ D.runesIntro=1; save();
+    const earned=Object.entries(D.runes).filter(([id,lv])=>lv>0&&runeDef(id));
+    popup('<h2>✦ Lífsrúnir</h2><div class="sub runeabout">'+RUNE_ABOUT+'</div><div class="runesum">Your stone already carries <b>'+earned.length+' rune'+(earned.length===1?'':'s')+'</b>.</div>'+
+      '<div class="addrow" style="margin-top:14px"><button class="mini" data-close>Later</button><button class="primary" id="ru-see" style="flex:1">See them</button></div>',()=>{ $('ru-see').onclick=()=>{ closePopup(); setTimeout(openRunes,250); }; });
+    return; }
+  const q=D.runeQ||[]; if(!q.length) return;
+  if(q.length>3){ const all=q.splice(0); save();
+    popup('<h2>✦ Your stone gathered '+all.length+' runes</h2><div class="runerows">'+all.map(x=>'<div class="runerow">'+runeMarkHTML(x.id,x.lv)+'<span><b>'+esc(runeDef(x.id)[1])+'</b><small>'+esc(runeLine(x.id,x.lv))+'</small></span></div>').join('')+'</div><div class="addrow" style="margin-top:14px"><button class="primary" data-close style="flex:1">Lovely</button></div>');
+    return; }
+  const x=q.shift(); save(); const r=runeDef(x.id); if(!r) return;
+  popup('<div class="runecele">'+runeMarkHTML(x.id,x.lv)+'<h2>'+(x.lv===1?'A new rune':'A rune deepens')+'</h2><div class="runename">'+esc(r[1])+'</div><div class="sub">'+esc(runeLine(x.id,x.lv))+'</div></div>'+
+    '<div class="addrow" style="margin-top:14px"><button class="mini" id="ru-all">All runes</button><button class="primary" data-close style="flex:1">Lovely</button></div>',()=>{ $('ru-all').onclick=()=>{ closePopup(); setTimeout(openRunes,250); }; });
+}
+/* every rune the stone carries */
+function openRunes(){
+  runeCheck(); const earned=RUNES.filter(r=>(D.runes||{})[r[0]]>0);
+  popup('<h2>✦ Lífsrúnir</h2><div class="sub runeabout">'+RUNE_ABOUT+'</div><div class="runerows">'+
+    (earned.length?earned.map(r=>{ const lv=D.runes[r[0]]; return '<div class="runerow">'+runeMarkHTML(r[0],lv)+'<span><b>'+esc(r[1])+'</b><small>'+esc(runeLine(r[0],lv))+'</small></span></div>'; }).join(''):'<div class="sub">Your stone hasn\'t gathered any runes yet.</div>')+
+    '</div><div class="addrow" style="margin-top:14px"><button class="primary" data-close style="flex:1">Close</button></div>');
+}
+setTimeout(()=>{ runeCheck(); runeShow(); },3000);
+setInterval(()=>{ runeCheck(); runeShow(); },5000);
+
 function steinhollInfo(){
   popup('<h2>🏛️ The Steinhöll</h2><div class="sub">Every bearer\'s stone record is kept at the Steinhöll. It\'s where a stone is changed, and where a bearer\'s details are updated.</div>'+
     '<div class="addrow" style="margin-top:16px"><button class="mini" data-close>Close</button><button class="primary" id="sh-visit" style="flex:1">Visit the Steinhöll</button></div>',()=>{
@@ -4746,6 +5020,7 @@ if($('wv-rows')) $('wv-rows').addEventListener('click',e=>{
 });
 function askNewStone(){
   const pf=D.profile; if(!pf||!pf.retiredStone||pf.moon==null) return;
+  const sv=$('surfaceov'); if(sv&&sv.classList.contains('show')){ setTimeout(askNewStone,700); return; } /* ask once the surface view is closed */
   const arr=BIRTHSTONES[pf.moon];
   popup('<h2>💎 Choose your stone</h2><div class="sub">'+esc(pf.retiredStone)+' is no longer one of the '+esc(MOONS[pf.moon])+' Moon\'s stones. Choose your lífsteinn from the three that are:</div>'+
     '<div class="stonegrid" style="margin-top:12px">'+arr.map((st,i)=>'<div class="stonepick" data-i="'+i+'">'+orbHTML(st)+'<div class="nm">'+stoneHTML(st[0],undefined,st[4]?'\u00a0✦':'')+'</div></div>').join('')+'</div>',sh=>{
@@ -4910,7 +5185,7 @@ function ccPicker(sel,txt,cur){ const known=CURRENCIES.some(x=>x[0]===(cur||''))
 function fundPace(f){ if(!f.due||!(f.target>f.cur)) return ''; const days=daysUntil(f.due); if(days<=0) return 'The date has passed — '+money(f,f.target-f.cur)+' still to go.';
   const wk=Math.max(1,days/7); return 'About '+money(f,Math.ceil((f.target-f.cur)/wk))+' a week to reach it by '+niceDate(f.due)+'.'; }
 function renderFunds(){
-  const w=$('fundlist'); if(!w) return; D.funds=D.funds||[];
+  marksRefresh(); const w=$('fundlist'); if(!w) return; D.funds=D.funds||[];
   if($('newfundcc')&&!$('newfundcc').options.length){ window._newCC=ccPicker($('newfundcc'),$('newfundcctxt'),D.fundCC||''); }
   if(!D.funds.length){ w.innerHTML='<div class="sub">No savings funds yet. Add one below.</div>'; return; }
   w.innerHTML=D.funds.map((f,i)=>{ const pct=f.target>0?Math.min(100,f.cur/f.target*100):0, pace=fundPace(f);
@@ -5134,9 +5409,9 @@ function renderRecItems(){
   recEdit.items.forEach((it,i)=>{
     const r=document.createElement('div'); r.className='taskrow';
     recItemFill(it);
-    const units=WEIGHT_UNITS.map(k=>[k,UNIT_LABEL[k]]).concat(foodDensity(it)?VOLUME_UNITS.map(k=>[k,UNIT_LABEL[k]]):[]).concat(it.porG?[['por',it.por+' ('+it.porG+' g)']]:[]);
+    const units=(it.porG?[['por',it.por+' ('+it.porG+' g)']]:[]).concat(WEIGHT_UNITS.map(k=>[k,UNIT_LABEL[k]])).concat(foodDensity(it)?VOLUME_UNITS.map(k=>[k,UNIT_LABEL[k]]):[]);
     r.className='taskrow recitem';
-    r.innerHTML='<div class="tn">'+esc(it.name)+'<div class="sub ri-g"></div></div><input type="number" inputmode="decimal" value="'+(it.amt!=null?it.amt:it.g)+'" min="0" step="any" style="width:66px">'+
+    r.innerHTML='<div class="tn">'+esc(it.name)+'<div class="sub ri-g"></div></div><input type="number" inputmode="decimal" value="'+(it.amt!=null?it.amt:it.g)+'" min="0" step="any" placeholder="amount" aria-label="Amount of '+esc(it.name)+'" style="width:70px">'+
       '<select style="width:auto;max-width:120px">'+units.map(([v,l])=>'<option value="'+v+'"'+(v===(it.unit||'g')?' selected':'')+'>'+esc(l)+'</option>').join('')+'</select><button class="mini danger">✕</button>';
     const amtIn=r.querySelector('input'), unitSel=r.querySelector('select'), gl=r.querySelector('.ri-g');
     const upd=()=>{ it.amt=+amtIn.value||0; it.unit=unitSel.value; const g=it.unit==='g'?it.amt:toGrams(it.amt,it.unit,it); it.g=Math.max(0.1,g||0);
@@ -5561,13 +5836,13 @@ if($('fastcal')) $('fastcal').onclick=fastToCalendar;
 /* ========== LAYOUT ENGINE: modules, your tabs, card menus, custom trackers ========== */
 var LAYOUT_READY=false, curTab=null;
 var CARDS=[
- ['c-hero','Date','📅','day','today'],['cdrow','Countdown strip','📆','countdowns','today'],['c-start','Getting started','✦','start','today'],['c-credit','Weekly credit','💎','credit','today'],['gemreview','Gem Day review','💎','review','today'],
+ ['c-hero','Date','📅','day','today'],['cdrow','Countdown strip','📆','countdowns','today'],['daymarks','Marked for today','📌','day','today'],['c-start','Getting started','✦','start','today'],['c-credit','Weekly credit','💎','credit','today'],['gemreview','Gem Day review','💎','review','today'],
  ['t-tasks','Tasks','✅','tasks','today'],['macroscard',"Today's macros",'🍲','food','today'],['t-water','Water','💧','water','today'],
  ['t-threads','Habits','🔁','threads','today'],['workoutcard','Workouts','💪','workouts','today'],['t-mood','Mood','🌤️','mood','today'],
  ['t-note','Note to self','✍🏽','journal','today'],['dreamcard','Dream Weave','🌙','sleep','today'],
  ['c-calendar','Calendar','🌕','calendar','cal'],['c-trends','Trends','📈','calendar','cal'],['insightscard','Patterns','🔭','calendar','cal'],['c-journal','Journal archive','📜','archive','cal'],
  ['c-goals','Goals & projects','🌟','goals','loom'],['c-funds','Savings funds','🏔️','funds','loom'],['c-countdowns','Countdowns','📆','countdowns','loom'],['colcard','Collections','🗃️','collections','loom'],
- ['c-logfood','Log food','🍳','food','food'],['c-quickadd','Quick add','⚡','food','food'],['c-recipes','Recipes','🍳','food','food'],['c-todaylog',"Today's log",'🧾','food','food'],
+ ['c-todaylog',"Today's log",'🧾','food','food'],['c-logfood','Log food','🍳','food','food'],['c-quickadd','Quick add','⚡','food','food'],['c-customfood','Create custom food','⭐','food','food'],['c-recipes','Recipes','🍳','food','food'],
  ['c-targets','Daily targets','🎯','food','food'],['c-nutri','Nutrients','🧪','food','food'],['c-macrocalc','Macro calculator','🧮','food','food'],['c-foodlib','Food library','📖','food','food'],
  ['c-fasting','Fasting timer','⏳','fast','fast'],['c-lytes','Electrolytes','🧂','fast','fast'],['c-stages','Fasting stages','🕐','fast','fast'],['c-fastlog','Recent fasts','🗓️','fast','fast'],
  ['measurecard','Measurements','📏','body','body'],['cyclecard','Cycle','🩸','cycle','body']];
@@ -5607,7 +5882,7 @@ function placeModule(id){
   if(!D.layout||!LAYOUT_READY) return null; const L=D.layout; let placedIn=null;
   const pt=placeTarget&&L.tabs.find(x=>x.id===placeTarget);
   CARDS.filter(c=>c[3]===id).forEach(c=>{ if(tabOf(c[0])) return;
-    const t=pt||L.tabs.find(x=>x.id===c[4])||L.tabs.find(x=>x.id===curTab)||L.tabs[0]; t.cards.push(c[0]); placedIn=t; });
+    const t=pt||L.tabs.find(x=>x.id===c[4])||L.tabs.find(x=>x.id===curTab)||L.tabs[0]; if(c[0]==='c-calendar') t.cards.unshift(c[0]); else t.cards.push(c[0]); placedIn=t; });
   return placedIn;
 }
 function moveModuleTo(id,tabId){
@@ -5638,7 +5913,7 @@ function ensureLayout(){
   if(!L||!Array.isArray(L.tabs)||!L.tabs.length){
     L=D.layout={tabs:DEFAULT_TABS.map(([id,name,icon])=>({id,name,icon,cards:[]})),known:[]};
     const cfg=D.todayCfg||{}, hidden=cfg.hidden||[];
-    const order=['c-hero','cdrow'].concat(cfg.order||[]);
+    const order=['c-hero','cdrow','daymarks'].concat(cfg.order||[]);
     CARDS.forEach(c=>{ if(c[4]==='today'&&!order.includes(c[0])) order.push(c[0]); });
     L.tabs[0].cards=order.filter(id=>!hidden.includes(id)&&CARDS.some(c=>c[0]===id));
     CARDS.forEach(c=>{ if(c[4]!=='today') L.tabs.find(t=>t.id===c[4]).cards.push(c[0]); });
@@ -5647,6 +5922,9 @@ function ensureLayout(){
   const all=allCardIds(), placed=new Set(L.tabs.flatMap(t=>t.cards));
   all.forEach(id=>{ if(!placed.has(id)&&!(L.known||[]).includes(id)){
     if(id==='gemreview'){ const t0=L.tabs[0], h=t0.cards.indexOf('c-hero'); t0.cards.splice(h+1,0,id); return; }
+    if(id==='daymarks'){ const t0=L.tabs.find(t=>t.id==='today')||L.tabs[0], a=Math.max(t0.cards.indexOf('cdrow'),t0.cards.indexOf('c-hero')); t0.cards.splice(a+1,0,id); return; }
+    if(id==='c-customfood'){ const ft=L.tabs.find(x=>x.cards.includes('c-logfood'));
+      if(ft){ const q=ft.cards.indexOf('c-quickadd'), lf=ft.cards.indexOf('c-logfood'); ft.cards.splice((q===lf+1?q:lf)+1,0,id); return; } }
     const m=CARDS.find(c=>c[0]===id); let t=m&&L.tabs.find(x=>x.id===m[4]);
     if(!t&&id.startsWith('col-')) t=L.tabs.find(x=>x.cards.includes('colcard'));
     (t||L.tabs[0]).cards.push(id); } });
@@ -6636,8 +6914,7 @@ function nutriPicker(){
   draw();
 }
 $('nutripick').onclick=nutriPicker;
-if($('cf-basis')) $('cf-basis').onchange=e=>{ $('cf-servbox').style.display=e.target.value==='serv'?'':'none'; };
-if($('cf-extra')) $('cf-extra').innerHTML=NUTRIENTS.filter(([x])=>x!=='fb').map(([x,lab,u])=>'<input type="number" step="0.01" data-n="'+x+'" placeholder="'+lab.toLowerCase()+' '+u+'">').join('');
+if($('cf-grid')){ $('cf-grid').insertAdjacentHTML('afterbegin',foodFormHTML('cf')); bindFoodForm('cf'); }
 
 /* ========== EDIT ANY DAY: every module you use, for one date ========== */
 var DE=null; /* {k, sel, q} */
@@ -6677,7 +6954,7 @@ function drawDayEditor(){
   if(moduleOn('cycle')){ const on=(D.cycleDays||[]).includes(k), sy=d.symp||{};
     html+=sec('🩸','Cycle','<div class="addrow" style="margin-top:0;flex-wrap:wrap"><button class="chip'+(on?' on':'')+'" id="de-period">🩸 Period day</button>'+SYMPTOMS.map(([id,l])=>'<button class="chip'+(sy[id]?' on':'')+'" data-sy="'+id+'">'+l+'</button>').join('')+'</div>'); }
   if(moduleOn('body')){ const me=(D.measures||[]).find(x=>keyOf(new Date(x.date))===k)||{};
-    html+=sec('📏','Measurements','<div class="formgrid">'+MFIELDS.filter(([f])=>!(f==='w'&&D.noNums)).map(([f,l])=>'<input type="number" inputmode="decimal" data-ms="'+f+'" placeholder="'+l.toLowerCase()+' '+(f==='w'?wU():lU())+'" value="'+(me[f]!=null?fx1(f==='w'?w2d(me[f]):l2d(me[f])):'')+'">').join('')+'</div>'); }
+    html+=sec('📏','Measurements','<div class="formgrid">'+MFIELDS.filter(([f])=>!(f==='w'&&D.noNums)).map(([f,l])=>'<label class="fld"><span>'+l+' ('+(f==='w'?wU():lU())+')</span><input type="number" inputmode="decimal" data-ms="'+f+'" value="'+(me[f]!=null?fx1(f==='w'?w2d(me[f]):l2d(me[f])):'')+'"></label>').join('')+'</div>'); }
   html+='<button class="primary" data-close style="width:100%;margin-top:14px">Done</button>';
   popup(html,sh=>{
     sh.scrollTop=keepTop;
@@ -7048,7 +7325,7 @@ const STONE_LINE={'Larvikite':'Blue-grey as drifting smoke, flashing silver when
  'Charoite':'Swirling purple, lilac and white, like a storm caught in stone.','Opal':'Milky white, alive with patches of every colour.',"Tiger's eye":'Brown and gold, with a bright band that glides as the stone turns.',
  'Topaz':'Brilliant golden orange, full of small fire.','Onyx':'Glossy black, smooth as still water.','Labradorite':'Dark grey that flares blue, teal and gold, like an aurora.'};
 const STN_INTERESTS=[['days','🌱','My days','tasks, mood, sleep, water'],['habits','🔁','Habits','things done regularly'],['food','🍲','Food and body','meals, movement, measurements'],
- ['reflect','✍🏽','Reflection','journal, weekly look back'],['plans','🌟','Goals and plans','projects, savings, countdowns'],['keep','🗃️','Things I keep','my collections'],['cycle','🌙','My cycle','period days and phases']];
+ ['reflect','✍🏽','Journal','daily notes, a weekly look back'],['plans','🌟','Goals and plans','projects, savings, countdowns'],['keep','🗃️','Things I keep','my collections'],['cycle','🌙','My cycle','period days and phases']];
 const AVOID_OPTS=[['meat','All meat'],['redmeat','Red meat'],['beef','Beef'],['pork','Pork'],['poultry','Poultry'],['fish','Fish'],['shellfish','Shellfish'],['dairy','Dairy'],['eggs','Eggs'],['gluten','Gluten'],['wheat','Wheat'],['treenuts','Tree nuts'],['peanuts','Peanuts'],['soy','Soy'],['sesame','Sesame'],['mustard','Mustard'],['celery','Celery'],['lupin','Lupin'],['sulphites','Sulphites'],['honey','Honey'],['alliums','Onion & garlic'],['nightshades','Nightshades'],['corn','Corn'],['legumes','Legumes'],['mushrooms','Mushrooms'],['alcohol','Alcohol'],['caffeine','Caffeine'],['other','✎ Something else']];
 /* what each food choice means, and what Lífsteinn does with it — shown when it's tapped */
 const STN_ABOUT={
@@ -7129,10 +7406,22 @@ function stnMusicStart(){
 function stnMusicToggle(){ if(!SM){ stnMusicStart(); return; } SM.on=!SM.on; const t=SM.C.currentTime; SM.master.gain.cancelScheduledValues(t); SM.master.gain.setValueAtTime(SM.master.gain.value,t); SM.master.gain.linearRampToValueAtTime(SM.on?.9:0,t+.8); $('stnmusic').classList.toggle('off',!SM.on); }
 function stnMusicStop(){ if(!SM) return; const S=SM; SM=null; const t=S.C.currentTime; S.master.gain.cancelScheduledValues(t); S.master.gain.setValueAtTime(S.master.gain.value,t); S.master.gain.linearRampToValueAtTime(0,t+2.5);
   setTimeout(()=>{ clearInterval(S.it); clearInterval(S.ib); try{ S.C.close(); }catch(e){} },2800); }
+/* leave a Steinhöll visit at once: nothing unfinished is kept, and it won't reopen next time */
+function stnLeave(){ if(!D.stn||!D.stn.redo) return; D.stn=null; save(); stnClose(); toast('You left the Steinhöll'); }
+function stnAskLeave(){ if(!D.stn||!D.stn.redo||$('stn').querySelector('.stninfo.leave')) return;
+  const box=document.createElement('div'); box.className='stninfo leave';
+  box.innerHTML='<div class="stninfoin"><h2>Leave the Steinhöll?</h2><p>Your stone stays just as it is. You\'re welcome back any time: tap your stone, or find the Steinhöll in Settings.</p>'+
+    '<button class="stnbtn" data-leave>Leave</button><button class="stnlink" data-stay>Stay a while</button></div>';
+  $('stn').appendChild(box); requestAnimationFrame(()=>box.classList.add('in'));
+  const close=()=>{ box.classList.remove('in'); setTimeout(()=>box.remove(),250); };
+  box.querySelector('[data-stay]').onclick=close; box.onclick=e=>{ if(e.target===box) close(); };
+  box.querySelector('[data-leave]').onclick=()=>{ box.remove(); stnLeave(); };
+}
+if($('stnexit')) $('stnexit').onclick=stnAskLeave;
 function stnClose(){ stnMusicStop(); document.documentElement.classList.remove('stn-boot'); $('stn').classList.remove('show'); document.body.classList.remove('stn-on'); }
 /* the plan an answer set produces: modules, tabs, habits, collections */
 function stnPlan(){
-  const a=D.stn.a, f=a.follow, on=new Set(['day']), habits=[], cols=[]; let pcos=false;
+  const a=D.stn.a, f=a.follow, on=new Set(['day','calendar']), habits=[], cols=[]; let pcos=false;
   const I=new Set(a.interests);
   if(!I.size||I.has('notsure')){ ['tasks','threads','journal'].forEach(m=>on.add(m)); }
   if(I.has('days')) (f.days||STN_FOLLOW.days.pre).forEach(m=>on.add(m));
@@ -7192,8 +7481,9 @@ function stnApplyModules(){
   /* the weekly credit lives behind its header button, not on a tab */
   L.tabs.forEach(t=>t.cards=t.cards.filter(c=>c!=='c-credit')); D.creditHdr=1;
   /* a calm default order: Today runs date → sleep → tasks → habits → mood → note; the calendar leads its tab */
-  const ORDERS={today:['c-hero','cdrow','c-start','dreamcard','t-tasks','t-threads','t-mood','t-note','t-water','macroscard','workoutcard','gemreview'],
-    cal:['c-calendar','c-trends','insightscard','c-journal'],fast:['c-fasting','c-stages','c-lytes','c-fastlog']};
+  const ORDERS={today:['c-hero','cdrow','daymarks','c-start','dreamcard','t-tasks','t-threads','t-mood','t-note','t-water','macroscard','workoutcard','gemreview'],
+    cal:['c-calendar','c-trends','insightscard','c-journal'],fast:['c-fasting','c-stages','c-lytes','c-fastlog'],
+    food:['macroscard','c-todaylog','c-logfood','c-quickadd','c-customfood','c-recipes','c-targets','c-nutri','c-macrocalc','c-foodlib']};
   L.tabs.forEach(t=>{ const o=ORDERS[t.id]; if(!o) return; const rk=id=>{ const i=o.indexOf(id); return i>=0?i:(id.startsWith('trk-')&&t.id==='today'?o.indexOf('t-threads')+.5:99); };
     t.cards=t.cards.map((c,i)=>[c,i]).sort((a,b)=>rk(a[0])-rk(b[0])||a[1]-b[1]).map(x=>x[0]); });
   L.tabs=L.tabs.filter(t=>t.cards.length||t.id==='today');
@@ -7220,8 +7510,11 @@ function stnFollowList(){ const a=D.stn.a, out=[];
   return out; }
 function stnGo(step,instant){
   D.stn.step=step; stnSave(); clearInterval(stnTimer);
+  if($('stnexit')){ $('stnexit').hidden=!D.stn.redo; $('stnexit').classList.toggle('solo',$('stnback').style.visibility==='hidden'); }
+  $('stn').classList.toggle('hall',!!D.stn.redo);
   const w=$('stnwin'); w.classList.remove('in'); w.onclick=null;
   $('stnback').style.visibility=(step==='welcome'||step==='reveal'||(step==='open'&&D.stn.redo)||step==='open')?'hidden':'visible';
+  if($('stnexit')) $('stnexit').classList.toggle('solo',$('stnback').style.visibility==='hidden');
   if(step!=='stonepv') $('stnbg').classList.remove('on');
   stnDots(step);
   setTimeout(()=>{ w.innerHTML=''; w.scrollTop=0; (STN_SCREENS[step]||STN_SCREENS.welcome)(w); requestAnimationFrame(()=>{ w.classList.add('in'); stnScrollHint(); }); }, instant?0:200);
