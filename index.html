@@ -7566,8 +7566,18 @@ function stnBackFrom(step){
 const esc2=x=>esc(String(x==null?'':x));
 const STN_SCREENS={
   welcome(w){ w.innerHTML='<div class="stnbig">💎</div><h2>Welcome to Lífsteinn</h2><p>A private companion for your days: habits, food, writing, plans — whatever you choose. Everything stays on this device.</p>'+
-    '<button class="stnbtn" id="sw-go">Begin</button><button class="stnlink" id="sw-about">What is this app?</button>';
-    $('sw-go').onclick=()=>{ stnMusicStart(); stnGo('open'); }; $('sw-about').onclick=()=>{ const box=document.createElement('div'); box.className='stninfo'; const src=$('aboutov').querySelector('.sheet').cloneNode(true);
+    '<button class="stnbtn" id="sw-go">Begin</button><button class="stnlink" id="sw-about">What is this app?</button><button class="stnlink" id="sw-restore">Restore a backup</button>';
+    $('sw-go').onclick=()=>{ stnMusicStart(); stnGo('open'); };
+    /* coming back to Lífsteinn: bring a backup straight in, no ceremony needed */
+    $('sw-restore').onclick=()=>{ const inp=document.createElement('input'); inp.type='file'; inp.accept='.json,application/json'; inp.style.display='none'; document.body.appendChild(inp);
+      inp.onchange=async()=>{ const f=inp.files[0]; inp.remove(); if(!f) return;
+        let data; try{ data=await readBackupFile(f); }catch(err){ toast('Could not read that file: '+err.message); return; }
+        try{ if(data._colPhotos){ for(const [id,v] of Object.entries(data._colPhotos)){ try{ await idbSet('colph:'+id,v); }catch(e){ lsWarn('restoring a photo',e); } } delete data._colPhotos; }
+          D=Object.assign({days:{},meals:{},fasts:[],activeFast:null,protocol:16,goals:[],measures:[],customFoods:[],tasks:[],countdowns:[],workouts:{},savedMeals:[],cycleDays:[],targets:{kcal:1500,p:100,nc:25,f:110}},data);
+          delete D.stn; if(D.profile||D.coachDone) D.stnDone=1;
+          toast('Welcome back 💎 Restoring…'); await store.save(D); setTimeout(()=>location.reload(),500);
+        }catch(err){ lsWarn('restoring a backup',err); toast('That backup could not be restored — try again'); } };
+      inp.click(); }; $('sw-about').onclick=()=>{ const box=document.createElement('div'); box.className='stninfo'; const src=$('aboutov').querySelector('.sheet').cloneNode(true);
       src.querySelectorAll('button,.addrow').forEach(x=>x.remove()); src.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id'));
       box.innerHTML='<div class="stninfoin stnabout"></div>'; box.firstChild.appendChild(src); box.firstChild.insertAdjacentHTML('beforeend','<button class="stnbtn" data-x>Close</button>');
       $('stn').appendChild(box); requestAnimationFrame(()=>box.classList.add('in'));
