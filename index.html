@@ -1047,6 +1047,7 @@ body.custcol input:not([type=range]),body.custcol select,body.custcol textarea{b
 body.custcol header{background:linear-gradient(165deg,var(--hdr-a) 0%,var(--hdr) 55%,var(--hdr-b) 100%)!important;border-bottom-color:var(--sun)!important;--headnavy:var(--hdr-a)}
 body.custcol header .kicker{color:var(--sunglow)!important}
 body.custcol header .tag{color:#fff!important}
+body.custcol .primary:not(.askdanger):not(.danger){background:var(--sapphire-deep)!important;border-color:var(--sapphire-deep)!important;color:var(--onacc)!important}
 body.custcol #skyfield,body.custcol #hstars{opacity:.6}
 body.custcol.aurora .card,body.custcol.aurora nav{background:var(--card)!important;border-color:var(--mist)!important}
 body.custcol.aurora input:not([type=range]),body.custcol.aurora select,body.custcol.aurora textarea{background:var(--paper)!important;border-color:var(--mist)!important;color:var(--ink)!important}
@@ -1133,7 +1134,7 @@ header h1{word-spacing:.32em}
 .tabimg{width:22px;height:22px;border-radius:6px;object-fit:cover;display:block;margin:0 auto 1px}
 .tabimgprev{width:40px;height:40px;border-radius:9px;object-fit:cover;border:1.5px solid var(--mist)}
 body.rearr main section.tab.active>[data-card]:not(.modoff){outline:1.5px dashed color-mix(in srgb,var(--sun) 65%,transparent);outline-offset:2px;position:relative}
-body.rearr main section.tab.active>[data-card]>*{pointer-events:none;opacity:.6}
+body.rearr main section.tab.active>[data-card]>*{pointer-events:none}
 body.rearr nav button{outline:1.5px dashed color-mix(in srgb,var(--sun) 55%,transparent);outline-offset:-3px}
 nav button.rdrop{background:color-mix(in srgb,var(--leaf) 30%,var(--card))!important;outline:2px solid var(--leaf)!important}
 nav button.rtabdrag{position:relative;z-index:61;box-shadow:0 8px 20px rgba(0,0,0,.25);background:var(--card)}
@@ -1242,6 +1243,32 @@ body.stargaze .navarrow,body.stn-on .navarrow{display:none!important}
    replaces the matching emoji everywhere in the UI. Missing files = emoji stays. */
 img.lsglyph{width:1.35em;height:1.35em;vertical-align:-0.3em;object-fit:contain;flex-shrink:0}
 nav button .ico img.lsglyph{width:1.45em;height:1.45em;vertical-align:-0.32em}
+
+/* ===== Round 21: from Söguþræðir — a wiggle while arranging, a squeeze when pressed, 16-point typing on touch ===== */
+@keyframes arrwig{0%,100%{transform:rotate(-.35deg)}50%{transform:rotate(.35deg)}}
+body.rearr main section.tab.active>[data-card]:not(.modoff){animation:arrwig 1.6s ease-in-out infinite}
+body.rearr main section.tab.active>[data-card]:not(.modoff):nth-child(2n){animation-delay:-.8s}
+body.rearr .ds-lifted,body.rearr .ds-drag{animation:none!important}
+@media (prefers-reduced-motion:reduce){body.rearr main section.tab.active>[data-card]:not(.modoff){animation:none}}
+.chip,.mini,.primary,.ctxlist button,.htools button,nav button{-webkit-tap-highlight-color:transparent;transition:transform .12s ease,box-shadow .18s ease,background-color .18s ease,border-color .18s ease}
+.chip:active,.mini:active{transform:scale(.97);border-color:var(--sun);box-shadow:0 0 14px rgba(232,199,102,.5)}
+.primary:active,.ctxlist button:active{transform:scale(.98);box-shadow:0 0 16px rgba(232,199,102,.45)}
+body.aurora .primary:active{box-shadow:0 0 16px rgba(87,199,154,.55)}
+body.eink .chip:active,body.eink .mini:active,body.eink .primary:active,body.eink .ctxlist button:active{box-shadow:none;border-color:#000}
+@media (pointer:coarse){
+  input:not([type=range]):not([type=checkbox]):not([type=radio]):not([type=color]):not([type=file]),select,textarea{font-size:max(16px,1em)}
+}
+.sliderow span{flex:0 0 104px}
+.sliderow b{flex:0 0 auto;min-width:44px;white-space:nowrap}
+/* on/off switches in Settings (the same switch in both apps) */
+.swrow{display:flex;align-items:center;gap:10px;margin-top:4px;font-family:'Winky Sans',sans-serif;font-size:14px;font-weight:600;color:var(--ink);line-height:1.4;cursor:pointer}
+.swrow span{flex:1}
+.swrow input[type=checkbox]{-webkit-appearance:none;appearance:none;flex:0 0 46px;width:46px;height:26px;border-radius:13px;background:var(--mist);position:relative;transition:background-color .18s;cursor:pointer;margin:0;border:none}
+.swrow input[type=checkbox]::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .18s;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--leaf)}
+.swrow input[type=checkbox]:checked{background:var(--leaf)}
+.swrow input[type=checkbox]:checked::after{left:23px;content:'✓'}
+body.eink .swrow input[type=checkbox]{border:1.5px solid #000;background:#fff}
+body.eink .swrow input[type=checkbox]:checked{background:#000}
 </style>
 </head>
 <body>
@@ -1251,7 +1278,7 @@ nav button .ico img.lsglyph{width:1.45em;height:1.45em;vertical-align:-0.32em}
   <div class="starfield" id="hstars"></div>
   <div class="htools hdrtools">
     <button id="sisterbtn" title="Lífsvefr — back to the loom, where every app meets">🧶</button>
-    <button id="viewbtn" title="Views">⚙️</button>
+    <button id="viewbtn" title="Settings">⚙️</button>
   </div>
   <button id="creditbtn" class="hdrcredit" title="Your weekly credit" aria-label="Weekly credit" hidden></button>
     <div class="htext">
@@ -1911,17 +1938,17 @@ nav button .ico img.lsglyph{width:1.45em;height:1.45em;vertical-align:-0.32em}
 
 <div class="overlay" id="viewov"><div class="sheet">
   <h2>⚙️ Settings</h2>
-  <div class="lbl">View</div>
+  <div class="lbl">Mode</div>
   <div class="viewseg" id="viewseg">
     <button data-v="stone" class="svbtn">💎 Your stone</button>
     <button data-v="day">☀️ Daylight</button><button data-v="candle">🕯️ Candlelight</button>
     <button data-v="aurora">🌌 Aurora</button><button data-v="eink">📖 Curtains Closed</button>
   </div>
-  <div class="lbl">Text</div>
+  <div class="lbl">App text</div>
   <button class="fontpick2" id="fontbtn"></button>
-  <div class="sliderow"><span>Size</span><input type="range" id="sizerange" min="85" max="140" step="5"><b id="sizeval"></b></div>
+  <div class="sliderow"><span>App text size</span><input type="range" id="sizerange" min="85" max="140" step="5"><b id="sizeval"></b></div>
   <div class="lbl">Colors</div>
-  <div class="addrow" style="margin-top:0"><button class="chip" id="colbtn" style="flex:1">🎨 Custom colors for this view</button><button class="mini" id="colreset">Reset</button></div>
+  <div class="addrow" style="margin-top:0"><button class="chip" id="colbtn" style="flex:1">🎨 Custom colors for this mode</button><button class="mini" id="colreset">Reset</button></div>
   <div id="colsliders">
     <div class="rolechips" id="rolechips"></div>
     <div class="sliderow"><span>Hue</span><input type="range" class="hue" data-hsl="h" min="0" max="359"></div>
@@ -1940,6 +1967,7 @@ nav button .ico img.lsglyph{width:1.45em;height:1.45em;vertical-align:-0.32em}
   <div class="addrow"><button class="mini" id="newtrkbtn">+ Add a habit</button></div>
   <div class="gentle">Long-press or right-click a card or tab to move or edit it.</div>
   <div id="setsys"></div>
+  <div class="lbl">Sounds</div><label class="swrow"><span>Soft chimes when you tick, finish or rearrange things</span><input type="checkbox" id="soundchk"></label>
   <div class="lbl">Tour</div><button class="mini" id="tourbtn" style="width:100%">🧭 Show the tour again</button>
       <div class="lbl">Start over</div>
   <div class="addrow" style="margin-top:0"><button class="mini danger" id="erasebtn" style="flex:1">♻ Erase everything</button></div>
@@ -4440,7 +4468,7 @@ $('newgoal').onkeydown=e=>{if(e.key==='Enter')$('addgoal').click();};
   migrateProfile(); migrateHabits(); migratePlans(); migrate5n(); LAYOUT_READY=true;
   try{ renderTargets(); renderMacrosToday(); renderWater(); renderNutri(); renderProtocols(); tickFast(); renderCredit(); renderPlannedFasts(); }catch(e){ lsWarn('a card couldn\'t refresh',e); }
   if(moduleOn('credit')){ D.credit=D.credit||{spends:[]}; const wk=creditWeekStart(todayKey()); if(D.credit.seenWeek&&D.credit.seenWeek!==wk) setTimeout(()=>toast('💎 Your stone\'s weekly credit has arrived — 100þ'),1600); D.credit.seenWeek=wk; D.credit.spends=D.credit.spends.filter(x=>x.week>=addDaysKey(wk,-56)); save(); }
-  setInterval(checkPlannedFasts,30000); setTimeout(checkPlannedFasts,2500); applyTodayLayout(); renderNutri(); applyLook(); applyComfort(); colPhotosBoot(); renderColChips(); renderCalSys(); renderGemReview(); renderStoneChip(); if(D.stn||(!D.profile&&D.freshStart&&!D.stnDone)) openSteinntaka(); else { document.documentElement.classList.remove('stn-boot'); if(!D.profile) openAbout(true); } checkBirthday(); showSurface();
+  setInterval(checkPlannedFasts,30000); setTimeout(checkPlannedFasts,2500); applyTodayLayout(); renderNutri(); try{ if(!lookAdopt(localStorage.getItem('hverlands-look'))&&!localStorage.getItem('hverlands-look')) lookShare(); }catch(e){ lsWarn('the shared look',e); } applyLook(); if(typeof paintSound==='function') paintSound(); applyComfort(); colPhotosBoot(); renderColChips(); renderCalSys(); renderGemReview(); renderStoneChip(); if(D.stn||(!D.profile&&D.freshStart&&!D.stnDone)) openSteinntaka(); else { document.documentElement.classList.remove('stn-boot'); if(!D.profile) openAbout(true); } checkBirthday(); showSurface();
   renderUnitUI(); renderCalendar(); renderMeasures(); renderGoals(); renderFunds(); renderBackupNag(); applyAurora(); seedStars();
   renderThreads(); applyThreads(); renderRecipes(); renderDreamWeave();
   renderFreqFoods(); renderSymptoms(); renderInsights();
@@ -4528,8 +4556,8 @@ function sparkleBurst(el){
   try{ const r=el.getBoundingClientRect(), gl=['✦','✧','⋆','✵'];
     for(let i=0;i<5;i++){ const s=document.createElement('span'); s.className='spark';
       s.textContent=gl[i%gl.length];
-      s.style.left=(r.left+r.width/2+(Math.random()*22-11))+'px';
-      s.style.top=(r.top+r.height/2+(Math.random()*10-5))+'px';
+      const z=zf(document.body); s.style.left=(r.left+r.width/2+(Math.random()*22-11))/z+'px';
+      s.style.top=(r.top+r.height/2+(Math.random()*10-5))/z+'px';
       s.style.setProperty('--dx',(Math.random()*30-15)+'px');
       s.style.animationDelay=(Math.random()*.12)+'s';
       document.body.appendChild(s); setTimeout(()=>s.remove(),1000); }
@@ -4538,9 +4566,11 @@ document.addEventListener('click',e=>{
   const c=e.target.closest&&e.target.closest('.check');
   if(c) setTimeout(()=>{ if(c.classList.contains('on')){ chime(); sparkleBurst(c); } },0);
 });
-if($('soundbtn')){ const sb=$('soundbtn');
-  const paint=()=>{ sb.textContent=D.sound?'🔔':'🔕'; sb.classList.toggle('on',!!D.sound); };
-  sb.onclick=()=>{ D.sound=!D.sound; save(); paint(); if(D.sound) chime(); }; paint(); }
+function paintSound(){ const sb=$('soundbtn'); if(sb){ sb.textContent=D.sound?'🔔':'🔕'; sb.classList.toggle('on',!!D.sound); } const sc=$('soundchk'); if(sc) sc.checked=!!D.sound; }
+function setSound(on){ D.sound=!!on; save(); paintSound(); lookShare(); if(D.sound) chime(); }
+if($('soundbtn')) $('soundbtn').onclick=()=>setSound(!D.sound);
+if($('soundchk')) $('soundchk').onchange=e=>setSound(e.target.checked);
+paintSound();
 
 
 /* ========== BIRTH MOON & LÍFSTEINN ========== */
@@ -4902,8 +4932,8 @@ if($('steinresetbtn')) $('steinresetbtn').onclick=async()=>{
 /* ===== COLLECTIONS: catalogues of kept things ===== */
 const COL_TPL={
  blank:{name:'',icon:'🗃️',fields:['Name|text']},
- pens:{name:'Pen collection',icon:'✒️',fields:['Name|text','Brand|text','Type / nib|text','Ink colour|text','Acquired|date','Notes|text']},
- wardrobe:{name:'Wardrobe',icon:'👗',fields:['Item|text','Category|text','Colour|text','Season|text','Notes|text']},
+ pens:{name:'Pen collection',icon:'✒️',fields:['Name|text','Brand|text','Type / nib|text','Ink color|text','Acquired|date','Notes|text']},
+ wardrobe:{name:'Wardrobe',icon:'👗',fields:['Item|text','Category|text','Color|text','Season|text','Notes|text']},
  books:{name:'Library',icon:'📚',fields:['Title|text','Author|text','Status|text','Rating|number','Notes|text']},
  watches:{name:'Watches',icon:'⌚',fields:['Model|text','Brand|text','Movement|text','Size (mm)|number','Acquired|date','Notes|text']},
  vinyl:{name:'Records',icon:'💿',fields:['Album|text','Artist|text','Format|text','Year|number','Condition|text','Notes|text']},
@@ -6039,6 +6069,8 @@ function openCredit(){
   sh.insertBefore(card,$('creditfoot')); card.classList.remove('modoff'); card.style.display='';
   renderCredit(); $('creditov').classList.add('show');
 }
+/* how much bigger an element is drawn than its own size (App text size): screen positions are divided by this */
+function zf(el){ try{ const r=el.getBoundingClientRect(); return (el.offsetWidth&&r.width)?r.width/el.offsetWidth:1; }catch(e){ return 1; } }
 function lsWarn(what,e){ try{ console.warn('Lífsteinn — '+what+':',e); }catch(_){} }
 function askBox(o){
   return new Promise(res=>{
@@ -6696,6 +6728,11 @@ function seedColors(v){
   if(was){ Object.entries(saved).forEach(([k,val])=>val&&b.style.setProperty(k,val)); b.classList.add('custcol'); }
   return out;
 }
+/* ===== One look for the family: app text, colors and sounds are shared with Söguþræðir through one key on this site ===== */
+function lookShare(){ try{ const L=lookGet(), at=Date.now(); L.at=at; localStorage.setItem('hverlands-look',JSON.stringify({size:L.size||100,font:L.font||'default',col:L.col||{},sound:D.sound!==false,at:at})); }catch(e){ lsWarn('sharing the look',e); } }
+function lookAdopt(raw){ try{ const o=JSON.parse(raw||'null'); if(!o||!o.at) return false; const L=lookGet(); if((L.at||0)>=o.at) return false;
+  L.size=o.size||100; L.font=o.font||'default'; L.col=o.col||{}; L.at=o.at; if(typeof o.sound==='boolean') D.sound=o.sound; return true; }catch(e){ lsWarn('reading the shared look',e); return false; } }
+window.addEventListener('storage',e=>{ if(e.key==='hverlands-look'&&lookAdopt(e.newValue)){ save(); applyLook(); renderLookUI(); if(typeof paintSound==='function') paintSound(); } });
 function lookGet(){ D.look=D.look||{}; if(D.look.size==null) D.look.size=Math.round((D.textSize||1)*100); D.look.col=D.look.col||{};
   Object.keys(D.look.col).forEach(v=>{ if(typeof D.look.col[v].bg!=='object') delete D.look.col[v]; }); return D.look; }
 var LOOK_VARS=['--onacc','--ondone','--leaf','--field','--paper','--card','--mist','--ink','--mut','--sapphire','--sapphire-deep','--sun','--sunglow','--hdr','--hdr-a','--hdr-b'];
@@ -6779,16 +6816,16 @@ function renderLookUI(){
 function fontPicker(){
   const L=lookGet(); HANDS.forEach(loadHand);
   popup('<h2>Aa Writing hand</h2><div class="fontgrid2">'+HANDS.map(h=>handCard(h,(L.font||'default')===h[0],'button')).join('')+'</div><button class="primary" data-close style="width:100%">Done</button>',sh=>{
-    sh.querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{ L.font=b.dataset.h; applyLook(); renderLookUI(); sh.querySelectorAll('[data-h]').forEach(x=>x.classList.toggle('on',x===b)); });
+    sh.querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{ L.font=b.dataset.h; applyLook(); renderLookUI(); lookShare(); sh.querySelectorAll('[data-h]').forEach(x=>x.classList.toggle('on',x===b)); });
   });
 }
 $('fontbtn').onclick=fontPicker;
-$('sizerange').oninput=e=>{ lookGet().size=+e.target.value; applyLook(); $('sizeval').textContent=e.target.value+'%'; };
+$('sizerange').oninput=e=>{ lookGet().size=+e.target.value; applyLook(); $('sizeval').textContent=e.target.value+'%'; lookShare(); };
 $('colbtn').onclick=()=>{ const L=lookGet(), v=curView(); if(v==='eink') return;
   if(!L.col[v]||!L.col[v].bg) L.col[v]=Object.assign(seedColors(v),{on:false});
-  L.col[v].on=!L.col[v].on; applyLook(); renderLookUI(); };
-$('colreset').onclick=()=>{ const L=lookGet(); delete L.col[curView()]; applyLook(); renderLookUI(); };
-document.querySelectorAll('#colsliders [data-hsl]').forEach(r=>r.oninput=()=>{ const c=lookGet().col[curView()]; if(!c||!c[colRole]) return; c[colRole][r.dataset.hsl]=+r.value; applyLook(); renderLookUI(); });
+  L.col[v].on=!L.col[v].on; applyLook(); renderLookUI(); lookShare(); };
+$('colreset').onclick=()=>{ const L=lookGet(); delete L.col[curView()]; applyLook(); renderLookUI(); lookShare(); };
+document.querySelectorAll('#colsliders [data-hsl]').forEach(r=>r.oninput=()=>{ const c=lookGet().col[curView()]; if(!c||!c[colRole]) return; c[colRole][r.dataset.hsl]=+r.value; applyLook(); renderLookUI(); lookShare(); });
 document.querySelectorAll('#viewseg button').forEach(b=>b.addEventListener('click',()=>renderLookUI()));
 $('startbtn').onclick=()=>$('viewbtn').click();
 
@@ -6815,7 +6852,7 @@ function closeSettings(apply){
     const o=JSON.parse(settingsSnap);
     if(o.noNums!==!!D.noNums&&!o.noNums) redrawNeeded=true;
     ['look','modules','threads','layout','trackers','threadCfg','calStatsOff'].forEach(k=>{ if(o[k]===null) delete D[k]; else D[k]=o[k]; });
-    D.noNums=o.noNums; setView(o.view,true);
+    D.noNums=o.noNums; setView(o.view,true); lookShare();
   }
   settingsSnap=null; save(); $('viewov').classList.remove('show');
   if(redrawNeeded){ redrawNeeded=false; flushSave(); location.reload(); return; }
@@ -7145,9 +7182,10 @@ document.addEventListener('pointercancel',()=>{ const st=RA.st; if(!st) return; 
 function raStart(e){ const st=RA.st, it=st.it, r=it.getBoundingClientRect(), ph=document.createElement(st.kind==='tab'?'span':'div');
   ph.className='ds-ph'+(st.kind==='tab'?' tabph':''); ph.style.height=r.height+'px'; if(st.kind==='tab') ph.style.width=r.width+'px';
   it.parentNode.insertBefore(ph,it);
-  Object.assign(it.style,{position:'fixed',left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px',zIndex:90,pointerEvents:'none',margin:0});
+  const z=zf(it); RA.st.z=z;
+  Object.assign(it.style,{position:'fixed',left:r.left/z+'px',top:r.top/z+'px',width:r.width/z+'px',height:r.height/z+'px',zIndex:90,pointerEvents:'none',margin:0});
   it.classList.add('ds-drag'); st.ph=ph; st.dx=e.clientX-r.left; st.dy=e.clientY-r.top; st.drag=true; }
-function raMove(e){ const st=RA.st, it=st.it; it.style.left=(e.clientX-st.dx)+'px'; it.style.top=(e.clientY-st.dy)+'px';
+function raMove(e){ const st=RA.st, it=st.it, z=st.z||1; it.style.left=(e.clientX-st.dx)/z+'px'; it.style.top=(e.clientY-st.dy)/z+'px';
   const under=document.elementFromPoint(e.clientX,e.clientY);
   if(st.kind==='card'){
     const nb=under&&under.closest('nav button[data-tab]'); document.querySelectorAll('nav button.rdrop').forEach(b=>b!==nb&&b.classList.remove('rdrop'));
@@ -7318,11 +7356,11 @@ function checkPlannedFasts(){
    then the stone, then the reveal. Answers are kept as they're given, so leaving halfway resumes. */
 const STONE_LINE={'Larvikite':'Blue-grey as drifting smoke, flashing silver when the light finds it.','Garnet':'Deep red, steady and warm, like an ember kept through winter.','Howlite':'Snow-white stone traced with a web of dark grey veins.',
  'Amethyst':'Purple as heather, from pale lilac to deep violet.','Bloodstone':'Deep green, flecked with drops of red.','Thulite':'Rosy pink with white mottling, like petals on snow.',
- 'Iolite':'Night-blue that turns to smoky gold in the hand, like dusk.','Goshenite':'Clear and colourless, pure as ice.','Moss agate':'Pale stone with green growths caught inside, like a garden under ice.',
+ 'Iolite':'Night-blue that turns to smoky gold in the hand, like dusk.','Goshenite':'Clear and colorless, pure as ice.','Moss agate':'Pale stone with green growths caught inside, like a garden under ice.',
  'Emerald':'Rich green with a soft garden of its own inside.','Sunstone':'Warm orange glittering with tiny points of light.','Alexandrite':'Green by day, raspberry by lamplight.',
  'Moonstone':'Milky stone with a blue glow that drifts as it moves.','Azurite':'Deep fjord-blue, flecked with green and copper like a coast seen from above.','Ruby':'Red, with a six-rayed star that wakes in the light.',
  'Sardonyx':'Bands of red-brown, orange and cream, layered like years.','Heliodor':'Golden-green, bright as a long summer day.','Sapphire':'Deep blue, holding a six-rayed star.',
- 'Charoite':'Swirling purple, lilac and white, like a storm caught in stone.','Opal':'Milky white, alive with patches of every colour.',"Tiger's eye":'Brown and gold, with a bright band that glides as the stone turns.',
+ 'Charoite':'Swirling purple, lilac and white, like a storm caught in stone.','Opal':'Milky white, alive with patches of every color.',"Tiger's eye":'Brown and gold, with a bright band that glides as the stone turns.',
  'Topaz':'Brilliant golden orange, full of small fire.','Onyx':'Glossy black, smooth as still water.','Labradorite':'Dark grey that flares blue, teal and gold, like an aurora.'};
 const STN_INTERESTS=[['days','🌱','My days','tasks, mood, sleep, water'],['habits','🔁','Habits','things done regularly'],['food','🍲','Food and body','meals, movement, measurements'],
  ['reflect','✍🏽','Journal','daily notes, a weekly look back'],['plans','🌟','Goals and plans','projects, savings, countdowns'],['keep','🗃️','Things I keep','my collections'],['cycle','🌙','My cycle','period days and phases']];
@@ -7734,8 +7772,8 @@ const COACH=[
  {text:'A card\'s quick menu: move it up or down, send it to another tab, give it a tab of its own, or switch it off.',enter:()=>{ const c=[...document.querySelectorAll('main section.tab.active>[data-card]:not(.modoff)')].find(x=>x.offsetHeight>40); if(c) cardMenu(c.dataset.card); },exit:()=>closePopup(),plain:1},
  {pos:'bottom',text:'To move several things at once, choose ⇅ Rearrange. Press and hold a card until it lifts, then drag it — or drop it on a tab. Tabs move the same way.',enter:()=>{ startRearrange(curTab); setTimeout(()=>{ const c=[...document.querySelectorAll('main section.tab.active>[data-card]:not(.modoff)')].find(x=>x.offsetHeight>40); if(c&&RA.on){ c.scrollIntoView({block:'center'}); c.classList.add('ds-lifted'); setTimeout(()=>c.classList.remove('ds-lifted'),1800); } },700); },exit:()=>{ endRearrange(true); window.scrollTo(0,0); },plain:1},
  {text:'This ⚙️ button opens Settings, where everything about your app can be changed. Let\'s look inside.',ring:()=>$('viewbtn').getBoundingClientRect()},
- STOP('View',null,'Views change the whole look. 💎 Your stone uses your own stone\'s colours.'),
- STOP('Text','Colors','Choose a comfortable font and text size, and make your own colours for any view.'),
+ STOP('Mode',null,'Modes change the whole look, and Söguþræðir follows the same mode. 💎 Your stone uses your own stone\'s colors.'),
+ STOP('App text','Colors','Choose a comfortable font and text size for the app, and make your own colors for any mode. Söguþræðir shares them.'),
  STOP('Calendar style',null,'Moons uses the Hverlands\' names for months and days. Standard months keeps everything plain.'),
  STOP('Modules',null,'Modules are the parts of your app. Switch any on or off, preview it, and choose which tab it lives on.'),
  STOP('Tabs','Habits','Rename, reorder or add tabs here, and manage all your habits in one place.'),
@@ -7757,7 +7795,8 @@ function coachEnd(){ coachExit(COACH[coachI]); document.querySelectorAll('.coach
   $('coach').classList.remove('show','dim','ringed'); coachI=COACH.length; D.coachDone=1; save(); }
 function coachPlace(c){ const ring=$('coachring'), bub=$('coachbub'); let r=null; try{ r=c.ring&&c.ring(); }catch(e){}
   $('coach').classList.toggle('ringed',!!r);
-  if(r){ Object.assign(ring.style,{left:(r.left-6)+'px',top:(r.top-6)+'px',width:(r.width+12)+'px',height:(r.height+12)+'px'}); }
+  const z=zf($('coach'));
+  if(r){ Object.assign(ring.style,{left:(r.left-6)/z+'px',top:(r.top-6)/z+'px',width:(r.width+12)/z+'px',height:(r.height+12)/z+'px'}); }
   bub.style.top=''; bub.style.bottom='';
   if(c.pos==='bottom'){ const nv=document.querySelector('nav'), nh=nv?nv.getBoundingClientRect().height:70; bub.style.bottom='calc('+Math.round(nh+14)+'px + env(safe-area-inset-bottom,0px))'; return; }
   const mid=r?(r.top+r.height/2):innerHeight*0.7; if(mid>innerHeight*0.5) bub.style.top='calc(16px + env(safe-area-inset-top,0px))'; else bub.style.bottom='calc(18px + env(safe-area-inset-bottom,0px))'; }
@@ -7806,8 +7845,9 @@ function glossShow(el){
   const g=GLOSS[el.dataset.gl]; if(!g) return; let b=$('glbub'); if(!b){ b=document.createElement('div'); b.id='glbub'; document.body.appendChild(b); }
   b.innerHTML='<b>'+g[0]+'</b>'+g[1]; b.classList.add('show');
   const r=el.getBoundingClientRect(), bw=Math.min(300,innerWidth-24); b.style.width=bw+'px';
-  b.style.left=Math.max(12,Math.min(innerWidth-bw-12,r.left+r.width/2-bw/2))+'px';
-  const below=r.bottom+130<innerHeight; b.style.top=(below?r.bottom+8:Math.max(8,r.top-8-b.offsetHeight))+'px';
+  const z=zf(document.body); b.style.width=bw/z+'px';
+  b.style.left=Math.max(12,Math.min(innerWidth-bw-12,r.left+r.width/2-bw/2))/z+'px';
+  const below=r.bottom+130<innerHeight; b.style.top=(below?r.bottom+8:Math.max(8,r.top-8-b.offsetHeight*z))/z+'px';
 }
 document.addEventListener('click',e=>{ const t=e.target.closest('[data-gl]'); const b=$('glbub');
   if(t){ e.preventDefault(); e.stopPropagation(); if(b&&b.classList.contains('show')&&b.dataset.k===t.dataset.gl){ b.classList.remove('show'); return; } glossShow(t); $('glbub').dataset.k=t.dataset.gl; return; }
